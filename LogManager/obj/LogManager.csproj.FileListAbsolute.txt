@@ -1,0 +1,40 @@
+G:\QBProjects\POReportUtility\POReportUtility\LogManager\bin\Debug\LogManager.dll
+G:\QBProjects\POReportUtility\POReportUtility\LogManager\bin\Debug\LogManager.pdb
+G:\QBProjects\POReportUtility\POReportUtility\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\QBProjects\POReportUtility\POReportUtility\LogManager\obj\Debug\LogManager.dll
+G:\QBProjects\POReportUtility\POReportUtility\LogManager\obj\Debug\LogManager.pdb
+C:\Mahesh\POReportUtility\POReportUtility\LogManager\bin\Debug\LogManager.dll
+C:\Mahesh\POReportUtility\POReportUtility\LogManager\bin\Debug\LogManager.pdb
+C:\Mahesh\POReportUtility\POReportUtility\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Mahesh\POReportUtility\POReportUtility\LogManager\obj\Debug\LogManager.dll
+C:\Mahesh\POReportUtility\POReportUtility\LogManager\obj\Debug\LogManager.pdb
+G:\QBProjects\PO_Utility_13_Aug_2009_ver_1.0.1\POReportUtility\POReportUtility\LogManager\bin\Debug\LogManager.dll
+G:\QBProjects\PO_Utility_13_Aug_2009_ver_1.0.1\POReportUtility\POReportUtility\LogManager\bin\Debug\LogManager.pdb
+G:\QBProjects\PO_Utility_13_Aug_2009_ver_1.0.1\POReportUtility\POReportUtility\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\QBProjects\PO_Utility_13_Aug_2009_ver_1.0.1\POReportUtility\POReportUtility\LogManager\obj\Debug\LogManager.dll
+G:\QBProjects\PO_Utility_13_Aug_2009_ver_1.0.1\POReportUtility\POReportUtility\LogManager\obj\Debug\LogManager.pdb
+G:\QBProjects\ImportIIF\LogManager\bin\Debug\LogManager.dll
+G:\QBProjects\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+G:\QBProjects\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\QBProjects\ImportIIF\LogManager\obj\Debug\LogManager.dll
+G:\QBProjects\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+D:\Quick books\Files\Next\ImportIIF\ImportIIF\LogManager\bin\Debug\LogManager.dll
+D:\Quick books\Files\Next\ImportIIF\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+D:\Quick books\Files\Next\ImportIIF\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+D:\Quick books\Files\Next\ImportIIF\ImportIIF\LogManager\obj\Debug\LogManager.dll
+D:\Quick books\Files\Next\ImportIIF\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+E:\Anita\Import IIF\ImportIIF\LogManager\bin\Debug\LogManager.dll
+E:\Anita\Import IIF\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+E:\Anita\Import IIF\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+E:\Anita\Import IIF\ImportIIF\LogManager\obj\Debug\LogManager.dll
+E:\Anita\Import IIF\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+E:\hajo files\Import IIF source\ImportIIF\LogManager\bin\Release\LogManager.dll
+E:\hajo files\Import IIF source\ImportIIF\LogManager\bin\Release\LogManager.pdb
+E:\hajo files\Import IIF source\ImportIIF\LogManager\obj\Release\ResolveAssemblyReference.cache
+E:\hajo files\Import IIF source\ImportIIF\LogManager\obj\Release\LogManager.dll
+E:\hajo files\Import IIF source\ImportIIF\LogManager\obj\Release\LogManager.pdb
+E:\hajo files\Import IIF source\ImportIIF\LogManager\bin\Debug\LogManager.dll
+E:\hajo files\Import IIF source\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+E:\hajo files\Import IIF source\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+E:\hajo files\Import IIF source\ImportIIF\LogManager\obj\Debug\LogManager.dll
+E:\hajo files\Import IIF source\ImportIIF\LogManager\obj\Debug\LogManager.pdb

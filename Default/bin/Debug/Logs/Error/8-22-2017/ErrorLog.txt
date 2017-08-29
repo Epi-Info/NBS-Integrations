@@ -1,0 +1,18 @@
+[08/22/2017 09:44:12] Column 'Source_Fld_NM' does not belong to table .
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at Default.Mapping.FillGrid(String formName) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\Mapping.cs:line 288
+   at Default.Mapping.cmbConfigList_SelectedIndexChanged(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\Mapping.cs:line 271
+------------------------------------------------------------------
+[08/22/2017 09:44:19] Column 'Source_Fld_NM' does not belong to table .
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at Default.Mapping.FillGrid(String formName) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\Mapping.cs:line 288
+   at Default.Mapping.cmbConfigList_SelectedIndexChanged(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\Mapping.cs:line 271
+------------------------------------------------------------------
+[08/22/2017 09:44:49] Column 'Source_Fld_NM' does not belong to table .
+   at System.Data.DataRow.GetDataColumn(String columnName)
+   at System.Data.DataRow.get_Item(String columnName)
+   at Default.Mapping.FillGrid(String formName) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\Mapping.cs:line 288
+   at Default.Mapping.cmbConfigList_SelectedIndexChanged(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\Mapping.cs:line 271
+------------------------------------------------------------------

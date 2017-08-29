@@ -1,0 +1,114 @@
+D:\Working folder\Hajo\hajo files\Import IIF source\ImportIIF\LogManager\bin\Debug\LogManager.dll
+D:\Working folder\Hajo\hajo files\Import IIF source\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+D:\Working folder\Hajo\hajo files\Import IIF source\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+D:\Working folder\Hajo\hajo files\Import IIF source\ImportIIF\LogManager\obj\Debug\LogManager.dll
+D:\Working folder\Hajo\hajo files\Import IIF source\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+D:\Working folder\ImportIIF\LogManager\bin\Debug\LogManager.dll
+D:\Working folder\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+D:\Working folder\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+D:\Working folder\ImportIIF\LogManager\obj\Debug\LogManager.dll
+D:\Working folder\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+C:\Documents and Settings\Uday\Desktop\ImportIIF\LogManager\bin\Debug\LogManager.dll
+C:\Documents and Settings\Uday\Desktop\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+C:\Documents and Settings\Uday\Desktop\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Uday\Desktop\ImportIIF\LogManager\obj\Debug\LogManager.dll
+C:\Documents and Settings\Uday\Desktop\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+D:\Working folder\Grant\ImportIIF\LogManager\bin\Debug\LogManager.dll
+D:\Working folder\Grant\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+D:\Working folder\Grant\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+D:\Working folder\Grant\ImportIIF\LogManager\obj\Debug\LogManager.dll
+D:\Working folder\Grant\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+E:\Uday\Working Folder\ImportIIF\LogManager\bin\Debug\LogManager.dll
+E:\Uday\Working Folder\ImportIIF\LogManager\bin\Debug\LogManager.pdb
+E:\Uday\Working Folder\ImportIIF\LogManager\obj\Debug\ResolveAssemblyReference.cache
+E:\Uday\Working Folder\ImportIIF\LogManager\obj\Debug\LogManager.dll
+E:\Uday\Working Folder\ImportIIF\LogManager\obj\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\CSV_Importer\LogManager\bin\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\CSV_Importer\LogManager\bin\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\CSV_Importer\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\uday\Desktop\CSV_Importer\LogManager\obj\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\CSV_Importer\LogManager\obj\Debug\LogManager.pdb
+G:\Backup\GenericForm\LogManager\bin\Debug\LogManager.dll
+G:\Backup\GenericForm\LogManager\bin\Debug\LogManager.pdb
+G:\Backup\GenericForm\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\Backup\GenericForm\LogManager\obj\Debug\LogManager.dll
+G:\Backup\GenericForm\LogManager\obj\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\GenericForm\LogManager\bin\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\GenericForm\LogManager\bin\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\GenericForm\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\uday\Desktop\GenericForm\LogManager\obj\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\GenericForm\LogManager\obj\Debug\LogManager.pdb
+C:\TimeSheets\LogManager\bin\Debug\LogManager.dll
+C:\TimeSheets\LogManager\bin\Debug\LogManager.pdb
+C:\TimeSheets\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\TimeSheets\LogManager\obj\Debug\LogManager.dll
+C:\TimeSheets\LogManager\obj\Debug\LogManager.pdb
+G:\Backup\TimeSheets\LogManager\bin\Debug\LogManager.dll
+G:\Backup\TimeSheets\LogManager\bin\Debug\LogManager.pdb
+G:\Backup\TimeSheets\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\Backup\TimeSheets\LogManager\obj\Debug\LogManager.dll
+G:\Backup\TimeSheets\LogManager\obj\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.pdb
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.dll
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.pdb
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.dll
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.pdb
+F:\Dropbox\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.dll
+F:\Dropbox\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.pdb
+F:\Dropbox\TimeSheets - 3.5\LogManager\obj\Debug\ResolveAssemblyReference.cache
+F:\Dropbox\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.dll
+F:\Dropbox\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.pdb
+G:\Backup\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.dll
+G:\Backup\TimeSheets - 3.5\LogManager\bin\Debug\LogManager.pdb
+G:\Backup\TimeSheets - 3.5\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\Backup\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.dll
+G:\Backup\TimeSheets - 3.5\LogManager\obj\Debug\LogManager.pdb
+C:\QbPayroll\LogManager\bin\Debug\LogManager.dll
+C:\QbPayroll\LogManager\bin\Debug\LogManager.pdb
+C:\QbPayroll\LogManager\obj\Debug\ResolveAssemblyReference.cache
+C:\QbPayroll\LogManager\obj\Debug\LogManager.dll
+C:\QbPayroll\LogManager\obj\Debug\LogManager.pdb
+G:\Backup\Tara\QbPayroll\LogManager\bin\Debug\LogManager.dll
+G:\Backup\Tara\QbPayroll\LogManager\bin\Debug\LogManager.pdb
+G:\Backup\Tara\QbPayroll\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\Backup\Tara\QbPayroll\LogManager\obj\Debug\LogManager.dll
+G:\Backup\Tara\QbPayroll\LogManager\obj\Debug\LogManager.pdb
+G:\Backup\Reagan\3DCartToQb\LogManager\bin\Debug\LogManager.dll
+G:\Backup\Reagan\3DCartToQb\LogManager\bin\Debug\LogManager.pdb
+G:\Backup\Reagan\3DCartToQb\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\Backup\Reagan\3DCartToQb\LogManager\obj\Debug\LogManager.dll
+G:\Backup\Reagan\3DCartToQb\LogManager\obj\Debug\LogManager.pdb
+G:\Working Folder\Reagan\3DCartToQb\LogManager\bin\Debug\LogManager.dll
+G:\Working Folder\Reagan\3DCartToQb\LogManager\bin\Debug\LogManager.pdb
+G:\Working Folder\Reagan\3DCartToQb\LogManager\obj\Debug\ResolveAssemblyReference.cache
+G:\Working Folder\Reagan\3DCartToQb\LogManager\obj\Debug\LogManager.dll
+G:\Working Folder\Reagan\3DCartToQb\LogManager\obj\Debug\LogManager.pdb
+D:\Dropbox\Common\LogManager\bin\Debug\LogManager.dll
+D:\Dropbox\Common\LogManager\bin\Debug\LogManager.pdb
+D:\Dropbox\Common\LogManager\obj\Debug\LogManager.dll
+D:\Dropbox\Common\LogManager\obj\Debug\LogManager.pdb
+D:\Dropbox\Common\LogManager\obj\Debug\LogManager.csprojResolveAssemblyReference.cache
+D:\Dropbox\Common1\LogManager\bin\Debug\LogManager.dll
+D:\Dropbox\Common1\LogManager\bin\Debug\LogManager.pdb
+D:\Dropbox\Common1\LogManager\obj\Debug\LogManager.dll
+D:\Dropbox\Common1\LogManager\obj\Debug\LogManager.pdb
+C:\Projects\REDCap Project_Version_1.0\LogManager\bin\Debug\LogManager.dll
+C:\Projects\REDCap Project_Version_1.0\LogManager\bin\Debug\LogManager.pdb
+C:\Projects\REDCap Project_Version_1.0\LogManager\obj\Debug\LogManager.csprojResolveAssemblyReference.cache
+C:\Projects\REDCap Project_Version_1.0\LogManager\obj\Debug\LogManager.dll
+C:\Projects\REDCap Project_Version_1.0\LogManager\obj\Debug\LogManager.pdb
+C:\Projects\NBSIntegrations\NBSIntegrations\LogManager\bin\Debug\LogManager.dll
+C:\Projects\NBSIntegrations\NBSIntegrations\LogManager\bin\Debug\LogManager.pdb
+C:\Projects\NBSIntegrations\NBSIntegrations\LogManager\obj\Debug\LogManager.csprojResolveAssemblyReference.cache
+C:\Projects\NBSIntegrations\NBSIntegrations\LogManager\obj\Debug\LogManager.dll
+C:\Projects\NBSIntegrations\NBSIntegrations\LogManager\obj\Debug\LogManager.pdb
+C:\GitProjects\NBS-Integrations\LogManager\bin\Debug\LogManager.dll
+C:\GitProjects\NBS-Integrations\LogManager\bin\Debug\LogManager.pdb
+C:\GitProjects\NBS-Integrations\LogManager\obj\Debug\LogManager.csprojResolveAssemblyReference.cache
+C:\GitProjects\NBS-Integrations\LogManager\obj\Debug\LogManager.dll
+C:\GitProjects\NBS-Integrations\LogManager\obj\Debug\LogManager.pdb

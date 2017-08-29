@@ -1,0 +1,15 @@
+[08/21/2017 09:54:30] Cannot clear this list.
+   at System.Data.DataView.System.Collections.IList.Clear()
+   at System.Windows.Forms.DataGridViewRowCollection.Clear()
+   at Default.MainScreen.btnLoad_Click(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\MainScreen.cs:line 44
+------------------------------------------------------------------
+[08/21/2017 09:54:35] Cannot clear this list.
+   at System.Data.DataView.System.Collections.IList.Clear()
+   at System.Windows.Forms.DataGridViewRowCollection.Clear()
+   at Default.MainScreen.btnLoad_Click(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\MainScreen.cs:line 44
+------------------------------------------------------------------
+[08/21/2017 10:16:00] This row already belongs to another table.
+   at System.Data.DataTable.InsertRow(DataRow row, Int64 proposedID, Int32 pos, Boolean fireEvent)
+   at System.Data.DataRowCollection.Add(DataRow row)
+   at Default.MainScreen.btnLoad_Click(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\MainScreen.cs:line 75
+------------------------------------------------------------------

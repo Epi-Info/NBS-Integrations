@@ -1,0 +1,30 @@
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\bin\x86\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\bin\x86\Debug\LogManager.pdb
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\obj\x86\Debug\LogManager.dll
+C:\Documents and Settings\uday\Desktop\TimeSheets - 3.5\LogManager\obj\x86\Debug\LogManager.pdb
+G:\Backup\TimeSheets - 3.5\LogManager\bin\x86\Debug\LogManager.dll
+G:\Backup\TimeSheets - 3.5\LogManager\bin\x86\Debug\LogManager.pdb
+G:\Backup\TimeSheets - 3.5\LogManager\obj\x86\Debug\ResolveAssemblyReference.cache
+G:\Backup\TimeSheets - 3.5\LogManager\obj\x86\Debug\LogManager.dll
+G:\Backup\TimeSheets - 3.5\LogManager\obj\x86\Debug\LogManager.pdb
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\bin\x86\Debug\LogManager.dll
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\bin\x86\Debug\LogManager.pdb
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\obj\x86\Debug\LogManager.dll
+C:\Users\Uday\Desktop\TimeSheets - 3.5\LogManager\obj\x86\Debug\LogManager.pdb
+D:\Dropbox\Common\LogManager\bin\x86\Debug\LogManager.dll
+D:\Dropbox\Common\LogManager\bin\x86\Debug\LogManager.pdb
+D:\Dropbox\Common\LogManager\obj\x86\Debug\LogManager.csprojResolveAssemblyReference.cache
+D:\Dropbox\Common\LogManager\obj\x86\Debug\LogManager.dll
+D:\Dropbox\Common\LogManager\obj\x86\Debug\LogManager.pdb
+D:\Dropbox\Common1\LogManager\bin\x86\Debug\LogManager.dll
+D:\Dropbox\Common1\LogManager\bin\x86\Debug\LogManager.pdb
+D:\Dropbox\Common1\LogManager\obj\x86\Debug\LogManager.csprojResolveAssemblyReference.cache
+D:\Dropbox\Common1\LogManager\obj\x86\Debug\LogManager.dll
+D:\Dropbox\Common1\LogManager\obj\x86\Debug\LogManager.pdb
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\LogManager\bin\x86\Debug\LogManager.dll
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\LogManager\bin\x86\Debug\LogManager.pdb
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\LogManager\obj\x86\Debug\LogManager.csprojResolveAssemblyReference.cache
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\LogManager\obj\x86\Debug\LogManager.dll
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\LogManager\obj\x86\Debug\LogManager.pdb

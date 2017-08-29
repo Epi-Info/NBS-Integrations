@@ -1,0 +1,19 @@
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCapAPI\REDCapAPI\bin\Debug\REDCapAPI.exe
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCapAPI\REDCapAPI\bin\Debug\REDCapAPI.pdb
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCapAPI\REDCapAPI\obj\x86\Debug\REDCapAPI.csprojResolveAssemblyReference.cache
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCapAPI\REDCapAPI\obj\x86\Debug\REDCapAPI.exe
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCapAPI\REDCapAPI\obj\x86\Debug\REDCapAPI.pdb
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\bin\Debug\REDCapAPI.dll
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\bin\Debug\REDCapAPI.pdb
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\bin\Debug\LogManager.dll
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\bin\Debug\LogManager.pdb
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\obj\x86\Debug\REDCapAPI.csprojResolveAssemblyReference.cache
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\obj\x86\Debug\REDCapAPI.dll
+\\cdc.gov\private\M304\dza4\NBS_Projects\REDCap Project_22.8.2017\REDCapAPI\obj\x86\Debug\REDCapAPI.pdb
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\bin\Debug\REDCapAPI.dll
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\bin\Debug\REDCapAPI.pdb
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\bin\Debug\LogManager.dll
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\bin\Debug\LogManager.pdb
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\obj\x86\Debug\REDCapAPI.csprojResolveAssemblyReference.cache
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\obj\x86\Debug\REDCapAPI.dll
+C:\Projects\REDCap Project_Version_1.0\REDCapAPI\obj\x86\Debug\REDCapAPI.pdb

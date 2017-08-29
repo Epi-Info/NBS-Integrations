@@ -1,0 +1,10 @@
+C:\Projects\FBMisc\FBAmazonTact\LogManager\bin\x86\Release\LogManager.dll
+C:\Projects\FBMisc\FBAmazonTact\LogManager\bin\x86\Release\LogManager.pdb
+C:\Projects\FBMisc\FBAmazonTact\LogManager\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Projects\FBMisc\FBAmazonTact\LogManager\obj\x86\Release\LogManager.dll
+C:\Projects\FBMisc\FBAmazonTact\LogManager\obj\x86\Release\LogManager.pdb
+D:\Dropbox\Common\LogManager\bin\x86\Release\LogManager.dll
+D:\Dropbox\Common\LogManager\bin\x86\Release\LogManager.pdb
+D:\Dropbox\Common\LogManager\obj\x86\Release\LogManager.csprojResolveAssemblyReference.cache
+D:\Dropbox\Common\LogManager\obj\x86\Release\LogManager.dll
+D:\Dropbox\Common\LogManager\obj\x86\Release\LogManager.pdb

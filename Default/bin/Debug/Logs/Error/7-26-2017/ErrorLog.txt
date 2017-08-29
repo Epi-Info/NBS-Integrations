@@ -1,0 +1,5 @@
+[07/26/2017 12:31:07] Cannot clear this list.
+   at System.Data.DataView.System.Collections.IList.Clear()
+   at System.Windows.Forms.DataGridViewRowCollection.Clear()
+   at Default.MainScreen.btnLoad_Click(Object sender, EventArgs e) in e:\Working Folder\Marion\Non FB Projects\Red CAP API\REDCapAPI\Default\MainScreen.cs:line 44
+------------------------------------------------------------------

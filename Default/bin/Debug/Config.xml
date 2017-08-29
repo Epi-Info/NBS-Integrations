@@ -1,0 +1,14 @@
+﻿<Settings>
+  <DataSource>Test</DataSource>
+	<ConnectionString></ConnectionString>
+  <RecordStatus>Approved</RecordStatus>
+  <MsgContainerStartId>1</MsgContainerStartId>
+  <PAT_LOCAL_ID>1</PAT_LOCAL_ID>
+  <INV_LOCAL_ID>1</INV_LOCAL_ID>
+  <Sql>
+    <Server caption="Server">.</Server>
+    <Username caption="Username"></Username>
+    <Password caption="Password"></Password>
+    <Database caption="Database">NBS_MSGOUTE</Database>
+  </Sql>
+</Settings>

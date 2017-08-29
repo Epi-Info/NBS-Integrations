@@ -1,0 +1,2 @@
+[08/24/2017 10:25:12] SELECT * from [Source_Config]
+[08/24/2017 10:25:18] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report'

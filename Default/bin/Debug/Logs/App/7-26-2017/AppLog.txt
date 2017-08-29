@@ -1,0 +1,66 @@
+[07/26/2017 11:26:29] SELECT * from [REDCap_Config]
+[07/26/2017 11:28:16] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 12:14:01] SELECT * from [REDCap_Config]
+[07/26/2017 12:14:28] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 12:16:04] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 12:30:42] SELECT * from [REDCap_Config]
+[07/26/2017 12:30:48] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 12:31:21] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 12:31:35] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 19:11:50] SELECT * from [REDCap_Config]
+[07/26/2017 19:12:46] SELECT * from [REDCap_Config]
+[07/26/2017 19:12:49] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 19:13:05] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 19:13:19] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:06:40] SELECT * from [REDCap_Config]
+[07/26/2017 22:07:50] SELECT * from [REDCap_Config]
+[07/26/2017 22:07:53] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:08:01] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:09:36] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:09:45] SELECT * from [REDCap_Config]
+[07/26/2017 22:09:51] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:09:59] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:10:29] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:10:46] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 22:12:45] SELECT * from [REDCap_Config]
+[07/26/2017 22:12:49] SELECT * from [REDCap_Config]
+[07/26/2017 22:12:52] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:13:12] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:13:37] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:16:22] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:17:04] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 22:18:12] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:20:17] SELECT * from [REDCap_Config]
+[07/26/2017 22:20:21] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:20:48] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:20:53] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 22:20:56] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:24:04] SELECT * from [REDCap_Config]
+[07/26/2017 22:24:42] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:25:39] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:25:42] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 22:25:44] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:26:37] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:30:28] SELECT * from [REDCap_Config]
+[07/26/2017 22:30:53] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:31:15] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:31:17] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 22:31:20] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:31:42] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:31:45] select max(INV_LOCAL_ID) from [MSG_CASE_INVESTIGATION]
+[07/26/2017 22:33:16] SELECT * from [REDCap_Config]
+[07/26/2017 22:33:27] SELECT * from [REDCap_Config]
+[07/26/2017 22:33:50] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:33:51] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:34:28] SELECT * from [REDCap_Config]
+[07/26/2017 22:34:31] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:34:43] SELECT * from [REDCap_Config]
+[07/26/2017 22:34:45] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:34:50] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:35:43] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[07/26/2017 22:37:07] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:37:59] select fm.SourceFieldName,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join REDCap_Config rc on rc.Config_id = fm.Config_id where rc.FormName = 'Electronic Morbidity Report (EPI-1)'
+[07/26/2017 22:38:02] select max(msg_container_uid) from [MSG_CONTAINER]
+[07/26/2017 22:38:05] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:38:23] select max(PAT_LOCAL_ID) from [MSG_PATIENT]
+[07/26/2017 22:38:23] select max(INV_LOCAL_ID) from [MSG_CASE_INVESTIGATION]

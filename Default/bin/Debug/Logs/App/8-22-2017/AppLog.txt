@@ -1,0 +1,38 @@
+[08/22/2017 09:43:53] SELECT * from [Source_Config]
+[08/22/2017 09:44:04] Please wait.. It is opening...
+[08/22/2017 09:44:05] SELECT * from [Source_Config]
+[08/22/2017 09:44:12] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 09:44:18] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 09:44:35] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 09:46:42] SELECT * from [Source_Config]
+[08/22/2017 09:46:45] Please wait.. It is opening...
+[08/22/2017 09:46:45] SELECT * from [Source_Config]
+[08/22/2017 09:46:50] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 09:47:02] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 09:51:03] SELECT * from [Source_Config]
+[08/22/2017 09:51:06] SELECT * from [Source_Config]
+[08/22/2017 09:51:10] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 09:52:24] SELECT * from [Source_Config]
+[08/22/2017 09:52:27] Please wait.. It is opening...
+[08/22/2017 09:52:27] SELECT * from [Source_Config]
+[08/22/2017 09:52:36] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 09:52:53] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 17:38:58] SELECT * from [Source_Config]
+[08/22/2017 17:39:03] Please wait.. It is opening...
+[08/22/2017 17:39:03] SELECT * from [Source_Config]
+[08/22/2017 17:39:09] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 17:39:38] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 18:31:05] Please wait.. It is opening...
+[08/22/2017 18:31:06] SELECT * from [Source_Config]
+[08/22/2017 18:31:14] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 18:31:22] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 19:18:01] Please wait.. It is opening...
+[08/22/2017 19:18:02] SELECT * from [Source_Config]
+[08/22/2017 19:18:06] SELECT * from [FLD_MAPPING] where Config_Id = '1'
+[08/22/2017 19:18:08] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 19:26:32] SELECT * from [Source_Config]
+[08/22/2017 19:26:38] SELECT * from [Source_Config] where Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 19:26:58] select fm.Source_Fld_NM,fm.Table_NM,fm.Column_NM from FLD_MAPPING fm inner join Source_Config rc on rc.Config_id = fm.Config_id where rc.Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 19:28:05] select fm.Source_Fld_NM,fm.Table_NM,fm.Column_NM,fm.NBS_Fld_NM from FLD_MAPPING fm inner join Source_Config rc on rc.Config_id = fm.Config_id where rc.Form_NM = 'Electronic Morbidity Report (EPI-1)'
+[08/22/2017 19:28:39] select max(msg_container_uid) from [MSG_CONTAINER]
+[08/22/2017 19:30:45] select max(msg_container_uid) from [MSG_CONTAINER]

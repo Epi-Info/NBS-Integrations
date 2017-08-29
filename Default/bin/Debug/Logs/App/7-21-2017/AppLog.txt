@@ -1,0 +1,6 @@
+[07/21/2017 10:05:20] SELECT * from [REDCap_Config]
+[07/21/2017 10:06:07] SELECT * from [REDCap_Config]
+[07/21/2017 10:23:41] SELECT * from [REDCap_Config]
+[07/21/2017 10:48:12] SELECT * from [REDCap_Config]
+[07/21/2017 10:59:31] SELECT * from [REDCap_Config]
+[07/21/2017 13:07:05] SELECT * from [REDCap_Config]

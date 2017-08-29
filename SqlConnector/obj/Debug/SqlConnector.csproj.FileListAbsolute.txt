@@ -1,0 +1,71 @@
+G:\Working Folder\Marion\FbShipworks\Code\SqlConnector\bin\Debug\SqlConnector.dll
+G:\Working Folder\Marion\FbShipworks\Code\SqlConnector\bin\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\FbShipworks\Code\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+G:\Working Folder\Marion\FbShipworks\Code\SqlConnector\obj\Debug\SqlConnector.dll
+G:\Working Folder\Marion\FbShipworks\Code\SqlConnector\obj\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\HomeCity\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+G:\Working Folder\Marion\HomeCity\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\HomeCity\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+G:\Working Folder\Marion\HomeCity\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+G:\Working Folder\Marion\HomeCity\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\PY Trading\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+G:\Working Folder\Marion\PY Trading\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\PY Trading\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+G:\Working Folder\Marion\PY Trading\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+G:\Working Folder\Marion\PY Trading\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\LogManager.dll
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\LogManager.pdb
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+G:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\LogManager.dll
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\bin\Debug\LogManager.pdb
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+E:\Working Folder\Marion\OliveOil Shipworks\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\bin\Debug\LogManager.dll
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\bin\Debug\LogManager.pdb
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+E:\Dropbox\SharpeConcepts\ERG\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\bin\Debug\LogManager.dll
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\bin\Debug\LogManager.pdb
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+E:\Working Folder\Another\ShipWorks Airslamit\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\bin\Debug\SqlConnector.dll
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\bin\Debug\SqlConnector.pdb
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\bin\Debug\LogManager.dll
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\bin\Debug\LogManager.pdb
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\obj\Debug\SqlConnector.dll
+F:\Dropbox\Tarabyte\Go Primal Products\Shipworks\SqlConnector\obj\Debug\SqlConnector.pdb
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\bin\Debug\SqlConnector.dll
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\bin\Debug\SqlConnector.pdb
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\bin\Debug\LogManager.dll
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\bin\Debug\LogManager.pdb
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\obj\Debug\SqlConnector.dll
+C:\Projects\REDCap Project_Version_1.0\SqlConnector\obj\Debug\SqlConnector.pdb
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\bin\Debug\SqlConnector.dll
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\bin\Debug\SqlConnector.pdb
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\bin\Debug\LogManager.dll
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\bin\Debug\LogManager.pdb
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\obj\Debug\SqlConnector.dll
+C:\Projects\NBSIntegrations\NBSIntegrations\SqlConnector\obj\Debug\SqlConnector.pdb
+C:\GitProjects\NBS-Integrations\SqlConnector\bin\Debug\SqlConnector.dll
+C:\GitProjects\NBS-Integrations\SqlConnector\bin\Debug\SqlConnector.pdb
+C:\GitProjects\NBS-Integrations\SqlConnector\bin\Debug\LogManager.dll
+C:\GitProjects\NBS-Integrations\SqlConnector\bin\Debug\LogManager.pdb
+C:\GitProjects\NBS-Integrations\SqlConnector\obj\Debug\SqlConnector.csprojResolveAssemblyReference.cache
+C:\GitProjects\NBS-Integrations\SqlConnector\obj\Debug\SqlConnector.dll
+C:\GitProjects\NBS-Integrations\SqlConnector\obj\Debug\SqlConnector.pdb

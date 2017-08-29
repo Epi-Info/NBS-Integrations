@@ -1,0 +1,40 @@
+[08/08/2017 11:10:15] SELECT * from [REDCap_Config]
+[08/08/2017 11:20:27] SELECT * from [REDCap_Config]
+[08/08/2017 11:23:00] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 11:23:19] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 11:26:09] SELECT * from [REDCap_Config]
+[08/08/2017 11:26:17] SELECT * from [REDCap_Config]
+[08/08/2017 11:26:28] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 11:26:29] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 11:28:29] SELECT * from [REDCap_Config]
+[08/08/2017 11:28:33] SELECT * from [REDCap_Config]
+[08/08/2017 11:28:35] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 11:28:36] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 11:36:23] SELECT * from [REDCap_Config]
+[08/08/2017 11:36:29] SELECT * from [REDCap_Config]
+[08/08/2017 11:36:33] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 11:36:34] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 11:41:23] SELECT * from [REDCap_Config]
+[08/08/2017 11:41:26] SELECT * from [REDCap_Config]
+[08/08/2017 11:41:29] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 11:41:31] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 12:08:42] SELECT * from [REDCap_Config]
+[08/08/2017 12:08:46] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 12:08:47] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 12:26:25] SELECT * from [REDCap_Config]
+[08/08/2017 12:26:32] SELECT * from [REDCap_Config]
+[08/08/2017 12:26:36] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 12:26:37] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 12:28:24] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 12:30:09] SELECT * from [REDCap_Config]
+[08/08/2017 12:30:13] SELECT * from [REDCap_Config]
+[08/08/2017 12:30:15] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 12:30:16] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 17:43:01] SELECT * from [REDCap_Config]
+[08/08/2017 17:43:09] SELECT * from [REDCap_Config]
+[08/08/2017 17:43:12] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 17:43:14] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
+[08/08/2017 17:45:43] SELECT * from [REDCap_Config]
+[08/08/2017 17:46:06] SELECT * from [REDCap_Config]
+[08/08/2017 17:46:10] SELECT * from [FLD_MAPPING] where Config_Id = '2'
+[08/08/2017 17:46:11] SELECT * from [REDCap_Config] where FormName = 'Electronic Morbidity Report (EPI-1)'
