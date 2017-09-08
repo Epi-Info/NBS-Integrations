@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using LogManager;
 using REDCapAPI;
+using EpiInfoAPI;
 
 namespace Default
 {
@@ -53,7 +54,7 @@ namespace Default
                 UpdateStatus("Please wait.. it is loading....");
                 string formName = Convert.ToString(cmbConfigList.SelectedItem);
                 DataTable tbl = _objSql.ReadSettings(formName);
-                var objClient = new RedCapClient();
+               
                 if (tbl != null && tbl.Rows.Count > 0)
                 {
                     foreach (DataRow row in tbl.Rows)
@@ -62,24 +63,55 @@ namespace Default
                         string token = Convert.ToString(row["token"]);
                         string formname = Convert.ToString(row["form_nm"]);
                         string excludeConditions = Convert.ToString(row["exclude_conditions"]);
+                        string datasource = Convert.ToString(row["datasource"]);
 
                         _siteOid = Convert.ToString(row["site_oid"]);
-                        DataTable apitbl = objClient.GetData(url, token, formname);
-                        string qry = "condition not in (" + excludeConditions + ")";
-                        var rows = apitbl.Select(qry);
-                        if (rows.Length > 0)
+                        if (datasource == "Epi Info")
                         {
-                            DataTable newtbl = apitbl.Clone();
-                            foreach (DataRow row1 in rows)
+                            var objClient = new Project(url,false);
+                          DataTable datatable=  objClient.GetData();
+
+                            if (!string.IsNullOrEmpty(excludeConditions))
                             {
-                                newtbl.ImportRow(row1);
+                                string qry = "condition not in (" + excludeConditions + ")";
+                                var rows = datatable.Select(qry);
+                                if (rows.Length > 0)
+                                {
+                                    DataTable newtbl = datatable.Clone();
+                                    foreach (DataRow row1 in rows)
+                                    {
+                                        newtbl.ImportRow(row1);
+                                    }
+                                    newtbl.DefaultView.Sort = "record_id asc";
+                                    dgvOrders.DataSource = newtbl;
+                                }
                             }
-                            newtbl.DefaultView.Sort = "record_id asc";
-                            dgvOrders.DataSource = newtbl;
+                            else
+                            {
+                                dgvOrders.DataSource = datatable;
+                            }
+                            
                         }
                         else
                         {
-                            dgvOrders.DataSource = apitbl;
+                           var objClient = new RedCapClient();
+                            DataTable apitbl = objClient.GetData(url, token, formname);
+                            string qry = "condition not in (" + excludeConditions + ")";
+                            var rows = apitbl.Select(qry);
+                            if (rows.Length > 0)
+                            {
+                                DataTable newtbl = apitbl.Clone();
+                                foreach (DataRow row1 in rows)
+                                {
+                                    newtbl.ImportRow(row1);
+                                }
+                                newtbl.DefaultView.Sort = "record_id asc";
+                                dgvOrders.DataSource = newtbl;
+                            }
+                            else
+                            {
+                                dgvOrders.DataSource = apitbl;
+                            }
                         }
                         InsertCheckBoxColumn();
                         UpdateStatus("Completed.");

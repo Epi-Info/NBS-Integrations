@@ -322,6 +322,32 @@ namespace REDCapAPI
             return null;
         }
 
+        public DataTable ReadEpiSettings()
+        {
+            try
+            {
+                if (OpenConnection())
+                {
+                    string qry = string.Format("SELECT * from [Source_Config] where DataSource ='Epi Info'");
+                    Log.WriteToApplicationLog(qry);
+                    var myCommand = new SqlCommand(qry, _connection);
+                    var adapter = new SqlDataAdapter(myCommand);
+                    var dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return null;
+        }
+
         public DataTable ReadSettings(string formName)
         {
             try

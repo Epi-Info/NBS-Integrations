@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using LogManager;
 using REDCapAPI;
+using EpiInfoAPI;
+using System.Xml;
 
 namespace Default
 {
@@ -15,6 +17,8 @@ namespace Default
         readonly List<Settings.Credentials> _configList = new List<Settings.Credentials>();
         List<string> redCapElemList = new List<string>();
         List<string> nbsElemList = new List<string>();
+        private const string FileName = @"{0}\Config.xml";
+        private static string _configPath = @"{0}\Config.xml";
 
         public Mapping()
         {
@@ -69,7 +73,14 @@ namespace Default
                 string token = Convert.ToString(dt.Rows[0]["token"]);
                 string formname = Convert.ToString(dt.Rows[0]["Form_NM"]);
                 _configId = Convert.ToString(dt.Rows[0]["Config_id"]);
-
+                string datasource = Convert.ToString(dt.Rows[0]["datasource"]);
+                if (datasource == "Epi Info")
+                {
+                    var objClient = new Project(url,false);
+                    redCapElemList = objClient.GetFields(1);                   
+                }
+                else
+                { 
                 RedCapClient api = new RedCapClient();
                 DataTable dataTbl = api.GetData(url, token, formname);
                 if (dataTbl != null && dataTbl.Rows.Count > 0)
@@ -80,6 +91,7 @@ namespace Default
                         redCapElemList.Add(clmName);
                     }
                 }
+            }
             }
 
             FillRedCapListBox();
@@ -278,8 +290,14 @@ namespace Default
 
         private void FillGrid(string formName)
         {
+            string datasource="" ;
             DataTable tbl = _objSql.LoadFieldMappings(_configId);
-            if (tbl != null && tbl.Rows.Count > 0)
+            DataTable dt = _objSql.ReadSettings(formName);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                 datasource = Convert.ToString(dt.Rows[0]["datasource"]);
+            }
+                if (tbl != null && tbl.Rows.Count > 0)
             {
                 foreach (DataRow row in tbl.Rows)
                 {
@@ -292,6 +310,15 @@ namespace Default
                     dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
                 }
             }
+            else if(tbl != null && tbl.Rows.Count==0 && datasource=="Epi Info")
+                {
+                var xmlDoc = new XmlDocument();
+                _configPath = string.Format(FileName, Application.StartupPath);
+                xmlDoc.Load(_configPath);                           
+                XmlNode selectedNode = xmlDoc.SelectSingleNode("/Settings/TableNames");
+               
+               // dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
+                }
         }
 
         private void btnAddNew_Click(object sender, EventArgs e)
@@ -303,13 +330,14 @@ namespace Default
                     CommonData.ShowMessage("Please select configuration first.", CommonData.MsgBoxType.Error);
                     return;
                 }
-                dgvValues.Rows.Clear();
+                //dgvValues.Rows.Clear();
                 EnableControls(true);
 
                 string formName = Convert.ToString(cmbConfigList.SelectedItem);
                 FillValues(formName);
                 FillMsgQuestions();
                 FillTableNames();
+                btnAddNew.Enabled = false;
             }
             catch (Exception ex)
             {

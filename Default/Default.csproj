@@ -52,6 +52,12 @@
   <ItemGroup>
     <Compile Include="CommonData.cs" />
     <Compile Include="DatagridViewCheckBoxHeaderCell.cs" />
+    <Compile Include="EpiConfiguration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EpiConfiguration.Designer.cs">
+      <DependentUpon>EpiConfiguration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Mapping.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,9 @@
     <Compile Include="Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="EpiConfiguration.resx">
+      <DependentUpon>EpiConfiguration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Mapping.resx">
       <DependentUpon>Mapping.cs</DependentUpon>
     </EmbeddedResource>
@@ -120,6 +129,10 @@
     <Content Include="shopping_full.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EpiInfoAPI\EpiInfoAPI.csproj">
+      <Project>{cc7afa7b-53b8-47b5-94d6-07856e308aa5}</Project>
+      <Name>EpiInfoAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogManager\LogManager.csproj">
       <Project>{0bae4ab7-103d-44e7-ae9f-43ffdfeafb8a}</Project>
       <Name>LogManager</Name>

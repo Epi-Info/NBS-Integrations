@@ -1,6 +1,7 @@
 ﻿<Settings>
   <DataSource>Test</DataSource>
-	<ConnectionString></ConnectionString>
+	<ConnectionString>  
+  </ConnectionString>
   <RecordStatus>Approved</RecordStatus>
   <MsgContainerStartId>1</MsgContainerStartId>
   <PAT_LOCAL_ID>1</PAT_LOCAL_ID>
@@ -11,4 +12,10 @@
     <Password caption="Password"></Password>
     <Database caption="Database">NBS_MSGOUTE</Database>
   </Sql>
+  <TableNames>
+    <Table fieldPrefix="Pat">MSG_PATIENT</Table>
+    <Table fieldPrefix="Pla">MSG_PLACE</Table>
+    <Table fieldPrefix="INV_">MSG_CASE_INVESTIGATION</Table>
+  </TableNames>
+
 </Settings>

@@ -39,12 +39,6 @@ namespace Default
            Log.WriteToApplicationLog(msg);
         }
 
-        private void mnuSettings_Click(object sender, EventArgs e)
-        {
-            var objSettings = new Configuration();
-            objSettings.ShowDialog(this);
-        }
-
         private void mnuMapping_Click(object sender, EventArgs e)
         {
             UpdateStatus("Please wait.. It is opening...");
@@ -56,6 +50,20 @@ namespace Default
         {
             MainScreen mainObj = new MainScreen();
             mainObj.ShowDialog(this);
+        }
+
+        private void redCapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var objSettings = new Configuration();
+            objSettings.ShowDialog(this);
+
+        }
+
+        private void epiInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var objSettings = new EpiConfiguration();
+            objSettings.ShowDialog(this);           
+                
         }
     }
 }
