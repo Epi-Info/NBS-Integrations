@@ -17,10 +17,7 @@ namespace EpiInfoAPI
         {
             get;set;
         }
-        private string dbName = string.Empty;
-        /// <summary>
-        /// Data Source Attribute
-        /// </summary>
+        private string dbName = string.Empty;        
         public string DataSource
         {
             get
@@ -47,7 +44,7 @@ namespace EpiInfoAPI
                 _connectionString = value;
             }
         }
-        protected SqlConnection sqlConnection
+        protected SqlConnection Sqlconnection
         {
             get;set;
         }
@@ -66,16 +63,16 @@ namespace EpiInfoAPI
         {
             slqConnBuild.ConnectionString = connectionString;
             _connectionString = connectionString;
-            sqlConnection = new SqlConnection(_connectionString);
+            Sqlconnection = new SqlConnection(_connectionString);
             DbConnection = GetConnection();           
         }
 
         protected virtual SqlConnection GetConnection()
         {
-            if (sqlConnection == null)
+            if (Sqlconnection == null)
                 return new SqlConnection(_connectionString);
             else
-                return sqlConnection;
+                return Sqlconnection;
         }
 
         public bool CanClaimConnectionString(string connectionString)
@@ -237,9 +234,10 @@ namespace EpiInfoAPI
                 sb2.Append(".GlobalRecordId) inner join ");
             }
             sb2.Length = sb2.Length - 12;
-            sb.Append(sb2);         
+            sb.Append(sb2);
+            sb.Append(" order by [LastSaveTime] DESC ");  
             IDbCommand command = DbConnection.CreateCommand();
-            command.CommandText = sb.ToString(); ; ;               
+            command.CommandText = sb.ToString();             
                 try
                 {
                     OpenConnection(DbConnection);
@@ -294,10 +292,10 @@ namespace EpiInfoAPI
                 {
                     dataTable.Columns.Remove("LastSaveLogonName");
                 }
-                if (dataTable.Columns.Contains("LastSaveTime"))
-                {
-                    dataTable.Columns.Remove("LastSaveTime");
-                }              
+                //if (dataTable.Columns.Contains("LastSaveTime"))
+                //{
+                //    dataTable.Columns.Remove("LastSaveTime");
+                //}              
                 return dataTable;
                 }
                 catch (Exception ex)
@@ -323,7 +321,7 @@ namespace EpiInfoAPI
                     "F.[SourceTableName], F.[CodeColumnName], F.[TextColumnName], " +                   
                     "F.[SourceFieldId] " +
                     "from metaFields F where F.[ViewId] = @viewId " +
-                    " where FieldTypeId not in(2,21,13)"+
+                    " and FieldTypeId not in(2,21,13)"+
                     "order by F.[FieldId]";
 
                 IDbCommand command = DbConnection.CreateCommand();

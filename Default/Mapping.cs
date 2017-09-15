@@ -19,7 +19,7 @@ namespace Default
         List<string> nbsElemList = new List<string>();
         private const string FileName = @"{0}\Config.xml";
         private static string _configPath = @"{0}\Config.xml";
-
+        List<string> unMappedList = new List<string>();
         public Mapping()
         {
             InitializeComponent();
@@ -77,7 +77,11 @@ namespace Default
                 if (datasource == "Epi Info")
                 {
                     var objClient = new Project(url,false);
-                    redCapElemList = objClient.GetFields(1);                   
+                    if(unMappedList.Count>0)
+                    {
+                        redCapElemList = unMappedList;
+                    }
+                   // redCapElemList = objClient.GetFields(1);                   
                 }
                 else
                 { 
@@ -290,35 +294,105 @@ namespace Default
 
         private void FillGrid(string formName)
         {
-            string datasource="" ;
+            string datasource=""; List<string> FldMappingList = new List<string>();
             DataTable tbl = _objSql.LoadFieldMappings(_configId);
             DataTable dt = _objSql.ReadSettings(formName);
             if (dt != null && dt.Rows.Count > 0)
             {
-                 datasource = Convert.ToString(dt.Rows[0]["datasource"]);
-            }
+                datasource = Convert.ToString(dt.Rows[0]["datasource"]);
+                string url = Convert.ToString(dt.Rows[0]["redcapurl"]);               
                 if (tbl != null && tbl.Rows.Count > 0)
-            {
-                foreach (DataRow row in tbl.Rows)
                 {
-                    string fldMapId = Convert.ToString(row["Fld_mapping_id"]);
+                    if (datasource == "Epi Info")
+                    {
+                        var objClient = new Project(url, false);
+                        redCapElemList = objClient.GetFields(1);                      
+                    }
+                        foreach (DataRow row in tbl.Rows)
+                    {
+                        string fldMapId = Convert.ToString(row["Fld_mapping_id"]);
 
-                    string sourceFieldName = Convert.ToString(row["Source_Fld_NM "]);
-                    string nbsFieldName = Convert.ToString(row["NBS_Fld_NM "]);
-                    string tableNm = Convert.ToString(row["Table_NM"]);
-                    string columnNm = Convert.ToString(row["Column_NM"]);
-                    dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
+                        string sourceFieldName = Convert.ToString(row["Source_Fld_NM "]);
+                        string nbsFieldName = Convert.ToString(row["NBS_Fld_NM "]);
+                        string tableNm = Convert.ToString(row["Table_NM"]);
+                        string columnNm = Convert.ToString(row["Column_NM"]);
+                        dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
+                        if (datasource == "Epi Info")
+                        {
+                            FldMappingList.Add(sourceFieldName);
+                        }
+                    }
+                    if (datasource == "Epi Info")
+                    {
+                        foreach (string fieldnm in redCapElemList)
+                        {
+                            if (!(FldMappingList.Contains(fieldnm)))
+                            {
+                                unMappedList.Add(fieldnm);
+                            }
+                        }
+                    }
+                }
+                else if (tbl != null && tbl.Rows.Count == 0 && datasource == "Epi Info")
+                {
+                    var objClient = new Project(url, false);
+                    redCapElemList = objClient.GetFields(1);
+                    var xmlDoc = new XmlDocument();
+                    _configPath = string.Format(FileName, Application.StartupPath);
+                    xmlDoc.Load(_configPath);
+                    XmlNode selectedNode = xmlDoc.SelectSingleNode("/Settings/TableNames");
+                    Dictionary<string, string> settingconfig = new Dictionary<string, string>();// <prefix,tablename>
+                    var mapList = new List<Settings.Mappings>();
+                    foreach (XmlNode childnode in selectedNode.ChildNodes)
+                    {
+                        settingconfig.Add(childnode.Attributes[0].Value, childnode.InnerText);
+                    }
+                          foreach(string fieldname in redCapElemList)
+                    {
+                        foreach(KeyValuePair<string,string> mapping in settingconfig)
+                        {
+                            if(mapping.Key.ToLower()== fieldname.ToLower().Substring(0,mapping.Key.ToLower().Length))
+                            {                                
+                                var map = new Settings.Mappings
+                                {
+                                    ConfigId = _configId,
+                                    DataSource = "Epi Info",
+                                    ApiFieldName = fieldname,
+                                    NbsFieldName = " ",
+                                    TableName = mapping.Value,
+                                    ColumnName = fieldname
+                                };
+                                mapList.Add(map);
+                            }
+                        }
+                    }
+                    if (mapList.Count > 0)
+                    {
+                        _objSql.SaveMappings(mapList);
+                        tbl = _objSql.LoadFieldMappings(_configId);
+                        if (tbl != null && tbl.Rows.Count > 0)
+                        {
+                            foreach (DataRow row in tbl.Rows)
+                            {
+                                string fldMapId = Convert.ToString(row["Fld_mapping_id"]);
+                                string sourceFieldName = Convert.ToString(row["Source_Fld_NM "]);
+                                string nbsFieldName = Convert.ToString(row["NBS_Fld_NM "]);
+                                string tableNm = Convert.ToString(row["Table_NM"]);
+                                string columnNm = Convert.ToString(row["Column_NM"]);
+                                dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
+                                FldMappingList.Add(sourceFieldName);
+                            }
+                        }
+                        foreach (string fieldnm in redCapElemList)
+                        {
+                            if (!(FldMappingList.Contains(fieldnm)))
+                            {
+                                unMappedList.Add(fieldnm);
+                            }
+                        }
+                    }
                 }
             }
-            else if(tbl != null && tbl.Rows.Count==0 && datasource=="Epi Info")
-                {
-                var xmlDoc = new XmlDocument();
-                _configPath = string.Format(FileName, Application.StartupPath);
-                xmlDoc.Load(_configPath);                           
-                XmlNode selectedNode = xmlDoc.SelectSingleNode("/Settings/TableNames");
-               
-               // dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
-                }
         }
 
         private void btnAddNew_Click(object sender, EventArgs e)

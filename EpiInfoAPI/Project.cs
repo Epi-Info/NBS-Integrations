@@ -28,6 +28,10 @@ namespace EpiInfoAPI
         {
             get;set;
         }
+        public AccessDBFactory accessdbFactory
+        {
+            get; set;
+        }
         public string DbConnection
         {
             get;set;
@@ -35,6 +39,10 @@ namespace EpiInfoAPI
         public bool IsProjectFile
         {
             get;set;
+        }
+        public bool IsSQLProject
+        {
+            get; set;
         }
         /// <summary>
         /// Gets/sets the path name of project file.
@@ -129,25 +137,28 @@ namespace EpiInfoAPI
                     {
                         case "Epi.Data.Office.AccessDBFactory":
                               this.CollectedDataDriver = "Epi.Data.Office.AccessDBFactory, Epi.Data.Office";
-                              AccessDBFactory accessdbfactory = new AccessDBFactory(filePath);
+                              accessdbFactory = new AccessDBFactory(filePath);
                               break;
                         case "Epi.Data.SqlServer.SqlDBFactory":
                         default:
                               this.CollectedDataDriver = "Epi.Data.SqlServer.SqlDBFactory, Epi.Data.SqlServer";
                               sqldbfactory = new SqlDBFactory(collectedDataConnectionString);
+                        IsSQLProject = true;
                               break;
                     }
             }
             else
             {
                collectedDataConnectionString = Decrypt(filePath);
-               if(collectedDataConnectionString.Contains("Epi.Data.Office.AccessDBFactory"))
-                {                   
-                    AccessDBFactory accessdbfactory = new AccessDBFactory(filePath);
+               if(collectedDataConnectionString.Contains("Microsoft.Jet.OLEDB.4.0"))
+                {
+                    accessdbFactory = new AccessDBFactory(collectedDataConnectionString);
+                    IsSQLProject = false;
                 }
                else
                 {                    
                     sqldbfactory = new SqlDBFactory(collectedDataConnectionString);
+                    IsSQLProject = true;
                 }
             }                                    
         }
@@ -174,13 +185,19 @@ namespace EpiInfoAPI
 
         public DataTable GetData()
         {
-            return sqldbfactory.GetData();
+            if (IsSQLProject)
+                return sqldbfactory.GetData();
+            else
+                return accessdbFactory.GetData();
         }
 
         public List<string> GetFields(int viewid)
         {
-            return sqldbfactory.GetFields(viewid);
+            if (IsSQLProject)
+                return sqldbfactory.GetFields(viewid);
+            else
+                return accessdbFactory.GetFields(viewid);
         }
 
-        }
+    }
 }

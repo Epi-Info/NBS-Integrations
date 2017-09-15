@@ -16,6 +16,10 @@
     <Table fieldPrefix="Pat">MSG_PATIENT</Table>
     <Table fieldPrefix="Pla">MSG_PLACE</Table>
     <Table fieldPrefix="INV_">MSG_CASE_INVESTIGATION</Table>
+    <Table fieldPrefix="ORG">MSG_ORGANIZATION</Table>
+    <Table fieldPrefix="IXS">MSG_INTERVIEW</Table>
+    <Table fieldPrefix="PRV">MSG_PROVIDER</Table>
+    <Table fieldPrefix="TRT">MSG_TREATMENT</Table>
   </TableNames>
 
 </Settings>

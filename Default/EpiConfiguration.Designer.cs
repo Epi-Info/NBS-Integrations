@@ -47,6 +47,7 @@
             this.clmConfigId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clmFormName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.btnAddNew = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvConfig)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,7 +57,7 @@
             this.btn_Browse.Name = "btn_Browse";
             this.btn_Browse.Size = new System.Drawing.Size(168, 44);
             this.btn_Browse.TabIndex = 0;
-            this.btn_Browse.Text = "Add New";
+            this.btn_Browse.Text = "Browse Epi Project File";
             this.btn_Browse.UseVisualStyleBackColor = true;
             this.btn_Browse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
@@ -144,7 +145,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(531, 145);
+            this.btnSave.Location = new System.Drawing.Point(536, 110);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(173, 48);
             this.btnSave.TabIndex = 31;
@@ -206,7 +207,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(531, 247);
+            this.btnDelete.Location = new System.Drawing.Point(536, 237);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(173, 48);
             this.btnDelete.TabIndex = 37;
@@ -214,11 +215,22 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // btnAddNew
+            // 
+            this.btnAddNew.Location = new System.Drawing.Point(536, 175);
+            this.btnAddNew.Name = "btnAddNew";
+            this.btnAddNew.Size = new System.Drawing.Size(168, 46);
+            this.btnAddNew.TabIndex = 38;
+            this.btnAddNew.Text = "Add New";
+            this.btnAddNew.UseVisualStyleBackColor = true;
+            this.btnAddNew.Click += new System.EventHandler(this.btn_AddNew_Click);
+            // 
             // EpiConfiguration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(852, 677);
+            this.Controls.Add(this.btnAddNew);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.dgvConfig);
             this.Controls.Add(this.txtExConditions);
@@ -264,5 +276,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clmConfigId;
         private System.Windows.Forms.DataGridViewTextBoxColumn clmFormName;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.Button btnAddNew;
     }
 }

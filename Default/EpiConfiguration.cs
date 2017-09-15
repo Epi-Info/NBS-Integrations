@@ -199,5 +199,21 @@ namespace Default
                 CommonData.ShowMessage("Failed", CommonData.MsgBoxType.Info);
             }
         }
+
+        private void btn_AddNew_Click(object sender, EventArgs e)
+        {
+            _configId = "";
+            ResetValues();
+        }
+
+        void ResetValues()
+        {
+            txtApiUrl.Text = "";
+          //  txtToken.Text = "";
+            txtFormName.Text = "";
+            txtAuthorId.Text = "";
+            txtCustodianId.Text = "";
+            txtStateId.Text = "";
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using LogManager;
 using REDCapAPI;
 using EpiInfoAPI;
+using System.Drawing;
 
 namespace Default
 {
@@ -64,11 +65,12 @@ namespace Default
                         string formname = Convert.ToString(row["form_nm"]);
                         string excludeConditions = Convert.ToString(row["exclude_conditions"]);
                         string datasource = Convert.ToString(row["datasource"]);
+                        string lastimported= Convert.ToString(row["LastImported"]);
 
                         _siteOid = Convert.ToString(row["site_oid"]);
                         if (datasource == "Epi Info")
                         {
-                            var objClient = new Project(url,false);
+                          var objClient = new Project(url,false);
                           DataTable datatable=  objClient.GetData();
 
                             if (!string.IsNullOrEmpty(excludeConditions))
@@ -81,16 +83,38 @@ namespace Default
                                     foreach (DataRow row1 in rows)
                                     {
                                         newtbl.ImportRow(row1);
-                                    }
-                                    newtbl.DefaultView.Sort = "record_id asc";
+                                    }                                 
                                     dgvOrders.DataSource = newtbl;
+                                     if (!string.IsNullOrEmpty(lastimported))
+                                    {
+                                        DateTime importdt = Convert.ToDateTime(lastimported);
+                                        foreach (DataGridViewRow r in dgvOrders.Rows)
+                                        {
+                                            DateTime lastsave = Convert.ToDateTime(r.Cells["LastSaveTime"].Value.ToString());
+                                            if(lastsave<= importdt)
+                                            {
+                                                r.DefaultCellStyle.ForeColor = Color.Gray;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             else
                             {
-                                dgvOrders.DataSource = datatable;
-                            }
-                            
+                                dgvOrders.DataSource = datatable;                                
+                                 if (!string.IsNullOrEmpty(lastimported))
+                                {
+                                    DateTime importdt = Convert.ToDateTime(lastimported);
+                                    foreach (DataGridViewRow r in dgvOrders.Rows)
+                                    {
+                                        DateTime lastsave = Convert.ToDateTime(r.Cells["LastSaveTime"].Value.ToString());
+                                        if (lastsave <= importdt)
+                                        {
+                                            r.DefaultCellStyle.ForeColor = Color.Gray;
+                                        }
+                                    }
+                                }
+                            }                            
                         }
                         else
                         {
@@ -166,35 +190,6 @@ namespace Default
             Application.DoEvents();
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
-        {
-            Sql objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
-            string error;
-            if (objSql.TestConnection(out error))
-            {
-                CommonData.ShowMessage("Success", CommonData.MsgBoxType.Info);
-                UpdateStatus("Success");
-            }
-            else
-            {
-                CommonData.ShowMessage("Failed", CommonData.MsgBoxType.Info);
-                UpdateStatus("Failed");
-            }
-        }
-
-        private void mnuSettings_Click(object sender, EventArgs e)
-        {
-            var objSettings = new Configuration();
-            objSettings.ShowDialog(this);
-        }
-
-        private void mnuMapping_Click(object sender, EventArgs e)
-        {
-            UpdateStatus("Please wait.. It is opening...");
-            Mapping objMaps = new Mapping();
-            objMaps.ShowDialog(this);
-        }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -229,9 +224,12 @@ namespace Default
                                                 ApiValue = value.Replace("_", "-")
                                             };
                                         mapping.NbsFieldName = nbsFldNm;
-                                        mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
-                                        mapping.DocumentId = _siteOid + "^" +
-                                                             Convert.ToString(dgrow.Cells["record_id"].Value);
+                                        if (tbl.Columns.Contains("record_id"))
+                                        {
+                                            mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
+                                            mapping.DocumentId = _siteOid + "^" +
+                                                                 Convert.ToString(dgrow.Cells["record_id"].Value);
+                                        }
                                         mapping.DocTypeCd = _siteOid + "^" + DateTime.Now.ToString("yyyy-MM-dd");
                                         mapping.EffectiveTime = DateTime.Now.ToString();
                                         mapping.RecordStatusCd = CommonData.Credentials.RecordStatus;
@@ -245,7 +243,21 @@ namespace Default
 
                                 if (_objSql.InsertApiValues(mapList))
                                 {
-                                  
+                                    string formName = Convert.ToString(cmbConfigList.SelectedItem);
+                                    DataTable dt = _objSql.ReadSettings(formName);
+                                    if (dt != null && dt.Rows.Count > 0)
+                                    {
+                                        foreach (DataRow row in dt.Rows)
+                                        {                                            
+                                            string formname = Convert.ToString(row["form_nm"]);                                          
+                                            string datasource = Convert.ToString(row["datasource"]);
+                                            string id = Convert.ToString(row["Config_id"]);                                          
+                                            if (datasource == "Epi Info")
+                                            {
+                                                _objSql.UpdateConfig(id);
+                                            }
+                                        }
+                                    }
                                 }
                                 else
                                 {

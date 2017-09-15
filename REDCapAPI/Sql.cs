@@ -220,6 +220,39 @@ namespace REDCapAPI
             return false;
         }
 
+        public bool UpdateConfig(string configid)
+        {
+            try
+            {
+                if (OpenConnection())
+                {
+                    SqlCommand com = new SqlCommand();
+                    com.Connection = _connection;
+                    com.CommandType = CommandType.Text;
+                    string qry = "";
+                    if (!string.IsNullOrEmpty(configid))
+                    {
+                         qry =
+                            string.Format(
+                                "update Source_Config set LastImported ='"+System.DateTime.Now+"' where Config_id ='{0}'",
+                                configid);
+                    }
+                    com.CommandText = qry;
+                    com.ExecuteNonQuery();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.WriteToErrorLog(e);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return false;
+        }
+
         public bool SaveMappings(IEnumerable<Settings.Mappings> mappings)
         {
             bool errorsOccured = false;
@@ -321,6 +354,33 @@ namespace REDCapAPI
             }
             return null;
         }
+
+        public DataTable ReadRedCapSettings()
+        {
+            try
+            {
+                if (OpenConnection())
+                {
+                    string qry = string.Format("SELECT * from [Source_Config] where DataSource <> 'Epi Info' ");
+                    Log.WriteToApplicationLog(qry);
+                    var myCommand = new SqlCommand(qry, _connection);
+                    var adapter = new SqlDataAdapter(myCommand);
+                    var dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return null;
+        }
+
 
         public DataTable ReadEpiSettings()
         {

@@ -17,7 +17,7 @@ namespace Default
         {
             InitializeComponent();
             _objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
-            DataTable tbl = _objSql.ReadSettings();
+            DataTable tbl = _objSql.ReadRedCapSettings();
             if (tbl != null)
             {
                 foreach (DataRow row in tbl.Rows)
