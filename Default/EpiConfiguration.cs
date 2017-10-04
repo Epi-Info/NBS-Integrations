@@ -49,12 +49,21 @@ namespace Default
                 DialogResult res = openFileDialog.ShowDialog();
                 if (res == DialogResult.OK)
                 {
-                    string filePath = openFileDialog.FileName.Trim();                  
-                    Project project = new Project(filePath, true);
-                    txtFormName.Text = project.FormName;
-                    _connectionstring = project.DbConnection;
-                    txtApiUrl.Text = _connectionstring;
-                    EnableFields();
+                    try
+                    {
+                        string filePath = openFileDialog.FileName.Trim();
+                        Project project = new Project(filePath, true);
+                        txtFormName.Text = project.FormName;
+                        _connectionstring = project.DbConnection;
+                        txtApiUrl.Text = _connectionstring;
+                        EnableFields();
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.WriteToErrorLog(ex);
+                        System.Windows.Forms.MessageBox.Show("Failed opening project file", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
+                    }
+
                 }
             }
             else
@@ -226,12 +235,20 @@ namespace Default
             DialogResult res = openFileDialog.ShowDialog();
             if (res == DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName.Trim();                
-                Project project = new Project(filePath, true);
-                txtFormName.Text = project.FormName;
-                _connectionstring = project.DbConnection;
-                txtApiUrl.Text = _connectionstring;
-                EnableFields();
+                try
+                {
+                    string filePath = openFileDialog.FileName.Trim();
+                    Project project = new Project(filePath, true);
+                    txtFormName.Text = project.FormName;
+                    _connectionstring = project.DbConnection;
+                    txtApiUrl.Text = _connectionstring;
+                    EnableFields();
+                }
+                catch(Exception ex)
+                {
+                    Log.WriteToErrorLog(ex);
+                    System.Windows.Forms.MessageBox.Show("Failed opening project file", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
+                }
             }
         }
 
@@ -246,9 +263,7 @@ namespace Default
         }
 
         void EnableFields()
-        {
-            //txtApiUrl.Enabled = true;           
-           // txtFormName.Enabled = true;
+        {            
             txtAuthorId.Enabled = true;
             txtCustodianId.Enabled = true;
             txtStateId.Enabled = true;
@@ -256,9 +271,7 @@ namespace Default
         }
 
         void DisableFields()
-        {
-            //txtApiUrl.Enabled=false;           
-           // txtFormName.Enabled = false;
+        {           
             txtAuthorId.Enabled = false;
             txtCustodianId.Enabled = false;
             txtStateId.Enabled = false;

@@ -185,13 +185,7 @@ namespace EpiInfoAPI
                 symmetricKey.Mode = CipherMode.CBC;
                 ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
                 string plainText = string.Empty;
-                MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
-                // CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-                // byte[] plainTextBytes = new byte[cipherTextBytes.Length];
-                // int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
-                // memoryStream.Close();
-                // cryptoStream.Close();
-                // string plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                MemoryStream memoryStream = new MemoryStream(cipherTextBytes);               
                 using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                 {
                     byte[] plainTextBytes = new byte[cipherTextBytes.Length];
