@@ -18,7 +18,25 @@ namespace Default
             _objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
+        public class ItemDisplay<TValue>
+        {
+            private readonly string m_displayText;
+
+            public ItemDisplay(TValue value, String displayText)
+            {
+                this.Value = value;
+                m_displayText = displayText;
+            }
+
+            public TValue Value { get; set; }
+
+            public override string ToString()
+            {
+                return m_displayText;
+            }
+        }
+
+      /*  private void btnTest_Click(object sender, EventArgs e)
         {
             Sql objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
             string error;
@@ -32,6 +50,12 @@ namespace Default
                 CommonData.ShowMessage("Failed", CommonData.MsgBoxType.Info);
                 UpdateStatus("Failed");
             }
+        }*/
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            Connection objConnection = new Connection();
+            objConnection.ShowDialog(this);
         }
 
         void UpdateStatus(string msg)

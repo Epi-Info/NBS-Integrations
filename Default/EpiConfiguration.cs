@@ -18,6 +18,9 @@ namespace Default
         public EpiConfiguration()
         {
             InitializeComponent();
+            var objSettings = new Settings(Application.StartupPath);
+            var cred = objSettings.ReadApiSettings();
+            CommonData.Credentials = cred;
             _objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
             DataTable tbl = _objSql.ReadEpiSettings();
             if (tbl != null)
@@ -28,27 +31,35 @@ namespace Default
                     string formName = Convert.ToString(row["Form_NM"]);
                     dgvConfig.Rows.Add(new object[] { false, _configId, formName });
                 }
-            }
-            var objSettings = new Settings(Application.StartupPath);
-            var cred = objSettings.ReadApiSettings();
-            CommonData.Credentials = cred;
+            }           
+            DisableFields();
         }            
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Epi Info 7 Project Files (*.prj)|*.prj";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.Multiselect = false;
-            DialogResult res = openFileDialog.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                string filePath = openFileDialog.FileName.Trim();                                            
-               // txtApiUrl.Text = filePath;
-                Project project = new Project(filePath,true);
-                txtFormName.Text = project.FormName;
-                _connectionstring = project.DbConnection;
-                txtApiUrl.Text = _connectionstring;
+            if (dgvConfig.Rows.Count == 0) return;
+            var dgvrows =
+                   dgvConfig.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
+            if (dgvrows.Any())
+            {               
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Epi Info 7 Project Files (*.prj)|*.prj";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+                DialogResult res = openFileDialog.ShowDialog();
+                if (res == DialogResult.OK)
+                {
+                    string filePath = openFileDialog.FileName.Trim();                  
+                    Project project = new Project(filePath, true);
+                    txtFormName.Text = project.FormName;
+                    _connectionstring = project.DbConnection;
+                    txtApiUrl.Text = _connectionstring;
+                    EnableFields();
+                }
+            }
+            else
+                {
+                System.Windows.Forms.MessageBox.Show("Please Select atleast one row", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
             }
 
         }
@@ -57,10 +68,10 @@ namespace Default
         {
             try
             {
-                if (e.RowIndex == -1) return;
-                string frmName = Convert.ToString(dgvConfig.Rows[e.RowIndex].Cells["clmFormName"].Value);
+                if (e.RowIndex == -1) return;               
+                    string frmName = Convert.ToString(dgvConfig.Rows[e.RowIndex].Cells["clmFormName"].Value);
                 _configId = Convert.ToString(dgvConfig.Rows[e.RowIndex].Cells["clmConfigId"].Value);
-
+                DisableFields();
                 DataTable tbl = _objSql.ReadSettings(frmName);
                 if (tbl != null)
                 {
@@ -78,8 +89,7 @@ namespace Default
 
         void FillValues(DataRow row)
         {
-            txtApiUrl.Text = Convert.ToString(row["redcapurl"]);
-           // txtToken.Text = Convert.ToString(row["token"]);
+            txtApiUrl.Text = Convert.ToString(row["redcapurl"]);          
             txtFormName.Text = Convert.ToString(row["Form_NM"]);
             txtAuthorId.Text = Convert.ToString(row["author_id"]);
             txtCustodianId.Text = Convert.ToString(row["custodian_id"]);
@@ -91,16 +101,21 @@ namespace Default
         {
             try
             {
+                if (string.IsNullOrEmpty(txtApiUrl.Text) || string.IsNullOrEmpty(txtFormName.Text))
+                {
+
+                    System.Windows.Forms.MessageBox.Show("Please enter valid information", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
+                    return;
+                }
                 if (!string.IsNullOrEmpty(_configId))
                 {
                     Save();
                     return;
                 }
                 if (_objSql.IsFormAlreadyExist(txtFormName.Text))
-                {
-                    CommonData.ShowMessage(
-                        "There is already a configuration exist in the database for form " + txtFormName.Text +
-                        ". This cant be saved.", CommonData.MsgBoxType.Info);
+                {                   
+                    System.Windows.Forms.MessageBox.Show("There is already a configuration exist in the database for form." + txtFormName.Text +
+                        "This cant be saved.", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
                     return;
                 }
                 Save();
@@ -117,56 +132,56 @@ namespace Default
             try
             {
                 if (dgvConfig.Rows.Count == 0) return;
-                if (
-                    CommonData.ShowMessage(
-                        "This action will delete the configuration which you have already created. Do you want to continue?",
-                        CommonData.MsgBoxType.Question) == DialogResult.Yes)
+                var dgvrows =
+                       dgvConfig.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
+                if (dgvrows.Any())
                 {
 
-                    //var rows = dgvConfig.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
-                    // if (rows.Any())
-                    var rows = dgvConfig.SelectedRows;                  
-                    if (rows.Count > 0)
-                    {
-                        var configIds = new List<string>();
-                        foreach (DataGridViewRow row in rows)
+                   if (
+                        CommonData.ShowMessage(
+                            "This action will delete the configuration which you have already created. Do you want to continue?",
+                           CommonData.MsgBoxType.Question) == DialogResult.Yes)
+                      //  if(System.Windows.Forms.MessageBox.Show("Success", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                    {                   
+                        var rows = dgvConfig.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
+                        if (rows.Any())
                         {
-                            string configId = Convert.ToString(row.Cells["clmConfigId"].Value);
-                            configIds.Add(configId);
-                        }
-
-                        if (configIds.Count > 0)
-                        {
-                            if (_objSql.DeleteConfiguration(configIds))
+                            var configIds = new List<string>();
+                            foreach (DataGridViewRow row in rows)
                             {
-
+                                string configId = Convert.ToString(row.Cells["clmConfigId"].Value);
+                                configIds.Add(configId);
                             }
-                        }
-                    }
 
-                    try
-                    {
-                        while (true)
-                        {
-
-                            // if (rows.Any())
-                            if (rows.Count > 0)
+                            if (configIds.Count > 0)
                             {
-                                foreach (DataGridViewRow row in rows)
+                                if (_objSql.DeleteConfiguration(configIds))
                                 {
-                                    dgvConfig.Rows.Remove(row);
+
                                 }
                             }
-                            else
-                            {
-                                break;
-                            }
+                        }
+
+                        try
+                        {                           
+                                if (rows.Any())                               
+                                {
+                                    foreach (DataGridViewRow row in rows)
+                                    {
+                                        dgvConfig.Rows.Remove(row);
+                                    }
+                                }                               
+                            ResetValues();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteToErrorLog(ex);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.WriteToErrorLog(ex);
-                    }
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Please Select atleast one row", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
                 }
             }
             catch (Exception ex)
@@ -191,12 +206,12 @@ namespace Default
             };
             if (_objSql.SaveConfig(c))
             {
-                CommonData.ShowMessage("Success", CommonData.MsgBoxType.Info);
+                System.Windows.Forms.MessageBox.Show("Success", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);               
                 Close();
             }
             else
             {
-                CommonData.ShowMessage("Failed", CommonData.MsgBoxType.Info);
+                System.Windows.Forms.MessageBox.Show("Failed", "Epi Info", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);              
             }
         }
 
@@ -204,16 +219,50 @@ namespace Default
         {
             _configId = "";
             ResetValues();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Epi Info 7 Project Files (*.prj)|*.prj";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Multiselect = false;
+            DialogResult res = openFileDialog.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName.Trim();                
+                Project project = new Project(filePath, true);
+                txtFormName.Text = project.FormName;
+                _connectionstring = project.DbConnection;
+                txtApiUrl.Text = _connectionstring;
+                EnableFields();
+            }
         }
 
         void ResetValues()
         {
-            txtApiUrl.Text = "";
-          //  txtToken.Text = "";
+            txtApiUrl.Text = "";          
             txtFormName.Text = "";
             txtAuthorId.Text = "";
             txtCustodianId.Text = "";
             txtStateId.Text = "";
+            txtExConditions.Text = "";            
+        }
+
+        void EnableFields()
+        {
+            //txtApiUrl.Enabled = true;           
+           // txtFormName.Enabled = true;
+            txtAuthorId.Enabled = true;
+            txtCustodianId.Enabled = true;
+            txtStateId.Enabled = true;
+            txtExConditions.Enabled = true;
+        }
+
+        void DisableFields()
+        {
+            //txtApiUrl.Enabled=false;           
+           // txtFormName.Enabled = false;
+            txtAuthorId.Enabled = false;
+            txtCustodianId.Enabled = false;
+            txtStateId.Enabled = false;
+            txtExConditions.Enabled = false;
         }
     }
 }

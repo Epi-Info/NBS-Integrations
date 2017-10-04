@@ -254,11 +254,15 @@ namespace EpiInfoAPI
                 }
                 if (dataTable.Columns.Contains("t.UniqueKey"))
                 {
-                    dataTable.Columns["t.UniqueKey"].ColumnName = "UniqueKey";
+                    dataTable.Columns["t.UniqueKey"].ColumnName = "record_id";
+                }
+                if ( dataTable.Columns.Contains("UniqueKey"))
+                {
+                    dataTable.Columns["UniqueKey"].ColumnName = "record_id";
                 }
                 foreach (int i in pageIds)
                 {                   
-                    string pageGUIDName = "GlobalRecordId" + i.ToString();
+                    string pageGUIDName = viewname+ i.ToString()+ "."+"GlobalRecordId"  ;
                     if (dataTable.Columns.Contains(pageGUIDName))
                     {
                         dataTable.Columns.Remove(pageGUIDName);

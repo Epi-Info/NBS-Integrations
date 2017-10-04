@@ -16,6 +16,7 @@ namespace Default
         public Configuration()
         {
             InitializeComponent();
+            DisableFields();
             _objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
             DataTable tbl = _objSql.ReadRedCapSettings();
             if (tbl != null)
@@ -36,6 +37,12 @@ namespace Default
         {
             try
             {
+                if (string.IsNullOrEmpty(txtApiUrl.Text)||string.IsNullOrEmpty(txtFormName.Text))
+                {
+
+                    System.Windows.Forms.MessageBox.Show("Please enter valid information", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
+                    return;
+                }
                 if (!string.IsNullOrEmpty(_configId))
                 {
                     Save();
@@ -43,9 +50,8 @@ namespace Default
                 }
                 if (_objSql.IsFormAlreadyExist(txtFormName.Text))
                 {
-                    CommonData.ShowMessage(
-                        "There is already a configuration exist in the database for form " + txtFormName.Text +
-                        ". This cant be saved.", CommonData.MsgBoxType.Info);
+                    System.Windows.Forms.MessageBox.Show("There is already a configuration exist in the database for form." + txtFormName.Text +
+                       "This cant be saved.", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
                     return;
                 }
                 Save();
@@ -60,7 +66,7 @@ namespace Default
         {
             var c = new Settings.Credentials
             {
-                DataSource = CommonData.Credentials.DataSource,
+                DataSource = "Red Cap",
                 ApiUrl = txtApiUrl.Text,
                 Token = txtToken.Text,
                 FormName = txtFormName.Text,
@@ -72,12 +78,12 @@ namespace Default
             };
             if (_objSql.SaveConfig(c))
             {
-                CommonData.ShowMessage("Success", CommonData.MsgBoxType.Info);
+                System.Windows.Forms.MessageBox.Show("Success", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
                 Close();
             }
             else
             {
-                CommonData.ShowMessage("Failed", CommonData.MsgBoxType.Info);
+                System.Windows.Forms.MessageBox.Show("Failed", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
             }
         }
 
@@ -104,6 +110,7 @@ namespace Default
                     if (tbl.Rows.Count > 0)
                     {
                         FillValues(tbl.Rows[0]);
+                        DisableFields();
                     }
                 }
             }
@@ -128,6 +135,7 @@ namespace Default
         {
             _configId = "";
             ResetValues();
+            EnableFields();
         }
 
         void ResetValues()
@@ -138,21 +146,44 @@ namespace Default
             txtAuthorId.Text = "";
             txtCustodianId.Text = "";
             txtStateId.Text = "";
+            txtExConditions.Text = "";
+        }
+
+        void EnableFields()
+        {
+            txtApiUrl.Enabled = true;
+            txtToken.Enabled = true;
+            txtFormName.Enabled = true;
+            txtAuthorId.Enabled = true;
+            txtCustodianId.Enabled = true;
+            txtStateId.Enabled = true;
+            txtExConditions.Enabled = true;
+        }
+
+        void DisableFields()
+        {
+            txtApiUrl.Enabled=false;
+            txtToken.Enabled = false;
+            txtFormName.Enabled = false;
+            txtAuthorId.Enabled = false;
+            txtCustodianId.Enabled = false;
+            txtStateId.Enabled = false;
+            txtExConditions.Enabled = false;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
             try
             {
-                if (dgvConfig.Rows.Count == 0) return;
-                if (
-                    CommonData.ShowMessage(
-                        "This action will delete the configuration which you have already created. Do you want to continue?",
-                        CommonData.MsgBoxType.Question) == DialogResult.Yes)
-                {
-
+                if (dgvConfig.Rows.Count == 0) return;               
                     var rows = dgvConfig.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
                     if (rows.Any())
+                    {
+                     if (
+                     CommonData.ShowMessage(
+                      "This action will delete the configuration which you have already created. Do you want to continue?",
+                     CommonData.MsgBoxType.Question) == DialogResult.Yes)
+                   // if(System.Windows.Forms.MessageBox.Show("Success", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                     {
                         var configIds = new List<string>();
                         foreach (DataGridViewRow row in rows)
@@ -168,35 +199,46 @@ namespace Default
 
                             }
                         }
-                    }
-
-                    try
-                    {
-                        while (true)
-                        {
-
-                            if (rows.Any())
-                            {
-                                foreach (DataGridViewRow row in rows)
+                        try
+                        {                            
+                                if (rows.Any())
                                 {
-                                    dgvConfig.Rows.Remove(row);
-                                }
-                            }
-                            else
-                            {
-                                break;
-                            }
+                                    foreach (DataGridViewRow row in rows)
+                                    {
+                                        dgvConfig.Rows.Remove(row);
+                                    }
+                                }                                                     
+                            ResetValues();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteToErrorLog(ex);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.WriteToErrorLog(ex);
-                    }
-                }
+                 }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("Please Select atleast one row", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
+                }              
             }
             catch (Exception ex)
             {
                 Log.WriteToErrorLog(ex);
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvConfig.Rows.Count == 0) return;
+            var dgvrows =
+                   dgvConfig.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
+            if (dgvrows.Any())
+            {
+                EnableFields();
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Please Select atleast one row", "Red Cap", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information, System.Windows.Forms.MessageBoxDefaultButton.Button1);
             }
         }
     }

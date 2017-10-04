@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonData.cs" />
+    <Compile Include="Connection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Connection.Designer.cs">
+      <DependentUpon>Connection.cs</DependentUpon>
+    </Compile>
     <Compile Include="DatagridViewCheckBoxHeaderCell.cs" />
     <Compile Include="EpiConfiguration.cs">
       <SubType>Form</SubType>
@@ -84,6 +90,9 @@
     <Compile Include="Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Connection.resx">
+      <DependentUpon>Connection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EpiConfiguration.resx">
       <DependentUpon>EpiConfiguration.cs</DependentUpon>
     </EmbeddedResource>

@@ -14,6 +14,7 @@ namespace Default
     {
         private readonly Sql _objSql;
         private string _configId;
+        private string _datasource;
         readonly List<Settings.Credentials> _configList = new List<Settings.Credentials>();
         List<string> redCapElemList = new List<string>();
         List<string> nbsElemList = new List<string>();
@@ -23,6 +24,9 @@ namespace Default
         public Mapping()
         {
             InitializeComponent();
+            var objSettings = new Settings(Application.StartupPath);
+            var cred = objSettings.ReadApiSettings();
+            CommonData.Credentials = cred;
             _objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
             FillConfigList();
             EnableControls(false);
@@ -73,13 +77,17 @@ namespace Default
                 string token = Convert.ToString(dt.Rows[0]["token"]);
                 string formname = Convert.ToString(dt.Rows[0]["Form_NM"]);
                 _configId = Convert.ToString(dt.Rows[0]["Config_id"]);
-                string datasource = Convert.ToString(dt.Rows[0]["datasource"]);
-                if (datasource == "Epi Info")
+                _datasource = Convert.ToString(dt.Rows[0]["datasource"]);
+                if (_datasource == "Epi Info")
                 {
-                    var objClient = new Project(url,false);
+                   // var objClient = new Project(url,false);
                     if(unMappedList.Count>0)
                     {
                         redCapElemList = unMappedList;
+                    }
+                    else
+                    {
+                        redCapElemList.Clear(); ;
                     }
                    // redCapElemList = objClient.GetFields(1);                   
                 }
@@ -103,6 +111,7 @@ namespace Default
 
         private void FillTableNames()
         {
+            cmbNbsTn.Items.Clear();
             DataTable tblName = _objSql.GetTableNames();
             if (tblName != null && tblName.Rows.Count > 0)
             {
@@ -144,7 +153,7 @@ namespace Default
                 string rcde = Convert.ToString(lbRcDe.SelectedItem);
                 if (string.IsNullOrEmpty(rcde))
                 {
-                    CommonData.ShowMessage("Please select REDCap Data Element.", CommonData.MsgBoxType.Error);
+                    CommonData.ShowMessage("Please select Data Element.", CommonData.MsgBoxType.Error);
                     return;
                 }
 
@@ -170,6 +179,10 @@ namespace Default
                 }
 
                 dgvValues.Rows.Add(new object[] { false, "", rcde, nbsde, nbstn, nbscn });
+                if (lbRcDe.Items.Contains(rcde))
+                {
+                    lbRcDe.Items.Remove(rcde);
+                }
             }
             catch (Exception ex)
             {
@@ -207,9 +220,7 @@ namespace Default
         private void btnRemove_Click(object sender, EventArgs e)
         {
             try
-            {
-                while (true)
-                {
+            {             
                     var rows =
                         dgvValues.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
                     if (rows.Any())
@@ -217,13 +228,16 @@ namespace Default
                         foreach (DataGridViewRow row in rows)
                         {
                             dgvValues.Rows.Remove(row);
+                        if (!lbRcDe.Items.Contains(row.Cells[2].Value))
+                        {
+                            lbRcDe.Items.Add(row.Cells[2].Value);
                         }
                     }
-                    else
+                    }              
+                     else
                     {
-                        break;
-                    }
-                }
+                        CommonData.ShowMessage("Please select atleast one row from the grid.", CommonData.MsgBoxType.Error);
+                    }                                             
             }
             catch (Exception ex)
             {
@@ -243,7 +257,7 @@ namespace Default
                         var map = new Settings.Mappings
                             {
                                 ConfigId = _configId,
-                                DataSource = CommonData.Credentials.DataSource,
+                                DataSource = _datasource,
                                 ApiFieldName = Convert.ToString(row.Cells["clmRcde"].Value),
                                 NbsFieldName = Convert.ToString(row.Cells["clmNbsDe"].Value),
                                 TableName = Convert.ToString(row.Cells["clmNbsTn"].Value),
@@ -280,11 +294,36 @@ namespace Default
                         if (c.FormName == formName)
                         {
                             _configId = c.ConfigId;
+                            _datasource = c.DataSource;
                             break;
                         }
                     }
                 }
+                Reset();
+                redCapElemList.Clear(); 
+                lbNbsDe.Items.Clear();
+                lbRcDe.Items.Clear();              
                 FillGrid(formName);
+               
+
+
+                try
+                {
+                    if (cmbConfigList.SelectedIndex == -1)
+                    {
+                        CommonData.ShowMessage("Please select configuration first.", CommonData.MsgBoxType.Error);
+                        return;
+                    }
+                    //dgvValues.Rows.Clear();
+                    EnableControls(true);                   
+                    FillValues(formName);
+                    FillMsgQuestions();
+                    FillTableNames();                    
+                }
+                catch (Exception ex)
+                {
+                    Log.WriteToErrorLog(ex);
+                }
             }
             catch (Exception ex)
             {
@@ -294,16 +333,16 @@ namespace Default
 
         private void FillGrid(string formName)
         {
-            string datasource=""; List<string> FldMappingList = new List<string>();
+            List<string> FldMappingList = new List<string>();
             DataTable tbl = _objSql.LoadFieldMappings(_configId);
             DataTable dt = _objSql.ReadSettings(formName);
             if (dt != null && dt.Rows.Count > 0)
             {
-                datasource = Convert.ToString(dt.Rows[0]["datasource"]);
+                _datasource = Convert.ToString(dt.Rows[0]["datasource"]);
                 string url = Convert.ToString(dt.Rows[0]["redcapurl"]);               
                 if (tbl != null && tbl.Rows.Count > 0)
                 {
-                    if (datasource == "Epi Info")
+                    if (_datasource == "Epi Info")
                     {
                         var objClient = new Project(url, false);
                         redCapElemList = objClient.GetFields(1);                      
@@ -317,12 +356,12 @@ namespace Default
                         string tableNm = Convert.ToString(row["Table_NM"]);
                         string columnNm = Convert.ToString(row["Column_NM"]);
                         dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
-                        if (datasource == "Epi Info")
+                        if (_datasource == "Epi Info")
                         {
                             FldMappingList.Add(sourceFieldName);
                         }
                     }
-                    if (datasource == "Epi Info")
+                    if (_datasource == "Epi Info")
                     {
                         foreach (string fieldnm in redCapElemList)
                         {
@@ -333,91 +372,74 @@ namespace Default
                         }
                     }
                 }
-                else if (tbl != null && tbl.Rows.Count == 0 && datasource == "Epi Info")
+                else if (tbl != null && tbl.Rows.Count == 0 && _datasource == "Epi Info")
                 {
-                    var objClient = new Project(url, false);
-                    redCapElemList = objClient.GetFields(1);
-                    var xmlDoc = new XmlDocument();
-                    _configPath = string.Format(FileName, Application.StartupPath);
-                    xmlDoc.Load(_configPath);
-                    XmlNode selectedNode = xmlDoc.SelectSingleNode("/Settings/TableNames");
-                    Dictionary<string, string> settingconfig = new Dictionary<string, string>();// <prefix,tablename>
-                    var mapList = new List<Settings.Mappings>();
-                    foreach (XmlNode childnode in selectedNode.ChildNodes)
-                    {
-                        settingconfig.Add(childnode.Attributes[0].Value, childnode.InnerText);
-                    }
-                          foreach(string fieldname in redCapElemList)
-                    {
-                        foreach(KeyValuePair<string,string> mapping in settingconfig)
-                        {
-                            if(mapping.Key.ToLower()== fieldname.ToLower().Substring(0,mapping.Key.ToLower().Length))
-                            {                                
-                                var map = new Settings.Mappings
-                                {
-                                    ConfigId = _configId,
-                                    DataSource = "Epi Info",
-                                    ApiFieldName = fieldname,
-                                    NbsFieldName = " ",
-                                    TableName = mapping.Value,
-                                    ColumnName = fieldname
-                                };
-                                mapList.Add(map);
-                            }
-                        }
-                    }
-                    if (mapList.Count > 0)
-                    {
-                        _objSql.SaveMappings(mapList);
-                        tbl = _objSql.LoadFieldMappings(_configId);
-                        if (tbl != null && tbl.Rows.Count > 0)
-                        {
-                            foreach (DataRow row in tbl.Rows)
-                            {
-                                string fldMapId = Convert.ToString(row["Fld_mapping_id"]);
-                                string sourceFieldName = Convert.ToString(row["Source_Fld_NM "]);
-                                string nbsFieldName = Convert.ToString(row["NBS_Fld_NM "]);
-                                string tableNm = Convert.ToString(row["Table_NM"]);
-                                string columnNm = Convert.ToString(row["Column_NM"]);
-                                dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
-                                FldMappingList.Add(sourceFieldName);
-                            }
-                        }
-                        foreach (string fieldnm in redCapElemList)
-                        {
-                            if (!(FldMappingList.Contains(fieldnm)))
-                            {
-                                unMappedList.Add(fieldnm);
-                            }
-                        }
-                    }
+                    FillEpimappings(tbl, url);
                 }
             }
         }
 
-        private void btnAddNew_Click(object sender, EventArgs e)
+        private void FillEpimappings(DataTable tbl,string url)
         {
-            try
+            List<string> FldMappingList = new List<string>();
+            var objClient = new Project(url, false);
+            redCapElemList = objClient.GetFields(1);
+            var xmlDoc = new XmlDocument();
+            _configPath = string.Format(FileName, Application.StartupPath);
+            xmlDoc.Load(_configPath);
+            XmlNode selectedNode = xmlDoc.SelectSingleNode("/Settings/TableNames");
+            Dictionary<string, string> settingconfig = new Dictionary<string, string>();// <prefix,tablename>
+            var mapList = new List<Settings.Mappings>();
+            foreach (XmlNode childnode in selectedNode.ChildNodes)
             {
-                if (cmbConfigList.SelectedIndex == -1)
+                settingconfig.Add(childnode.Attributes[0].Value, childnode.InnerText);
+            }
+            foreach (string fieldname in redCapElemList)
+            {
+                foreach (KeyValuePair<string, string> mapping in settingconfig)
                 {
-                    CommonData.ShowMessage("Please select configuration first.", CommonData.MsgBoxType.Error);
-                    return;
+                    if (mapping.Key.ToLower() == fieldname.ToLower().Substring(0, mapping.Key.ToLower().Length))
+                    {
+                        var map = new Settings.Mappings
+                        {
+                            ConfigId = _configId,
+                            DataSource = _datasource,
+                            ApiFieldName = fieldname,
+                            NbsFieldName = " ",
+                            TableName = mapping.Value,
+                            ColumnName = fieldname
+                        };
+                        mapList.Add(map);
+                        break;
+                    }
                 }
-                //dgvValues.Rows.Clear();
-                EnableControls(true);
-
-                string formName = Convert.ToString(cmbConfigList.SelectedItem);
-                FillValues(formName);
-                FillMsgQuestions();
-                FillTableNames();
-                btnAddNew.Enabled = false;
             }
-            catch (Exception ex)
+            if (mapList.Count > 0)
             {
-                Log.WriteToErrorLog(ex);
+                _objSql.SaveMappings(mapList);
+                tbl = _objSql.LoadFieldMappings(_configId);
+                if (tbl != null && tbl.Rows.Count > 0)
+                {
+                    foreach (DataRow row in tbl.Rows)
+                    {
+                        string fldMapId = Convert.ToString(row["Fld_mapping_id"]);
+                        string sourceFieldName = Convert.ToString(row["Source_Fld_NM "]);
+                        string nbsFieldName = Convert.ToString(row["NBS_Fld_NM "]);
+                        string tableNm = Convert.ToString(row["Table_NM"]);
+                        string columnNm = Convert.ToString(row["Column_NM"]);
+                        dgvValues.Rows.Add(new object[] { false, fldMapId, sourceFieldName, nbsFieldName, tableNm, columnNm });
+                        FldMappingList.Add(sourceFieldName);
+                    }
+                }
+                foreach (string fieldnm in redCapElemList)
+                {
+                    if (!(FldMappingList.Contains(fieldnm)))
+                    {
+                        unMappedList.Add(fieldnm);
+                    }
+                }
             }
-        }
+        }       
 
         void EnableControls(bool flag)
         {
@@ -431,19 +453,19 @@ namespace Default
         {
             try
             {
-                if (
-                    CommonData.ShowMessage(
-                        "This action will delete the configuration which you have already created. Do you want to continue?",
-                        CommonData.MsgBoxType.Question) == DialogResult.Yes)
-                {
-
-                    var rows = dgvValues.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
+                var rows = dgvValues.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));                
+                       
                     if (rows.Any())
+                    {
+                    if (
+                  CommonData.ShowMessage(
+                      "This action will delete the configuration which you have already created. Do you want to continue?",
+                      CommonData.MsgBoxType.Question) == DialogResult.Yes)
                     {
                         var fldMapIds = new List<string>();
                         foreach (DataGridViewRow row in rows)
                         {
-                            string fldId = Convert.ToString(row.Cells["clmFldMapId"].Value);
+                            string fldId = Convert.ToString(row.Cells["clmFldMapId"].Value);                           
                             fldMapIds.Add(fldId);
                         }
 
@@ -454,30 +476,26 @@ namespace Default
 
                             }
                         }
-                    }
 
-                    try
-                    {
-                        while (true)
+                        try
                         {
-
-                            if (rows.Any())
-                            {
-                                foreach (DataGridViewRow row in rows)
-                                {
-                                    dgvValues.Rows.Remove(row);
-                                }
-                            }
-                            else
-                            {
-                                break;
-                            }
+                            //while (true)
+                            //{                              
+                                    foreach (DataGridViewRow row in rows)
+                                    {
+                                        dgvValues.Rows.Remove(row);
+                                    }                              
+                           // }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteToErrorLog(ex);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.WriteToErrorLog(ex);
-                    }
+                }
+                else
+                {
+                    CommonData.ShowMessage("Please select atleast one row from the grid.", CommonData.MsgBoxType.Error);
                 }
             }
             catch (Exception ex)
@@ -592,6 +610,31 @@ namespace Default
             {
                 txtDataElemSearch.Text = "";
             }
+        }
+
+        void cbHeader_OnCheckBoxClicked(bool state)
+        {
+            SelectAll(state);
+        }
+
+        void SelectAll(bool isSelected)
+        {
+            for (int i = 0; i < dgvValues.Rows.Count; i++)
+            {
+                if (!dgvValues[0, i].ReadOnly)
+                    dgvValues[0, i].Value = isSelected;
+            }
+            GetSelectedRowsCount();
+        }
+
+        void GetSelectedRowsCount()
+        {
+            var rows = dgvValues.Rows.OfType<DataGridViewRow>().Where(row => Convert.ToBoolean(row.Cells[0].Value));
+            if (rows.Any())
+            {               
+                return;
+            }
+          //  UpdateStatus("No records are selected.");
         }
     }
 }

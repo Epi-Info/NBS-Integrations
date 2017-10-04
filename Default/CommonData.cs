@@ -6,7 +6,7 @@ namespace Default
     {
         #region "Member variables"
 
-        public const string AppName = "Red CAP";
+        public const string AppName = "NBS";
         public static REDCapAPI.Settings.Credentials Credentials;
         public static readonly string AppPath = AppDomain.CurrentDomain.BaseDirectory;
         public const string NoErrorLogFound = "No error log found.";

@@ -14,7 +14,7 @@ namespace Default
     {
         private readonly Sql _objSql;
         private string _siteOid;
-        DatagridViewCheckBoxHeaderCell _cbHeader;
+        DatagridViewCheckBoxHeaderCell _cbHeader;      
 
         public MainScreen()
         {
@@ -84,7 +84,7 @@ namespace Default
                                     {
                                         newtbl.ImportRow(row1);
                                     }                                 
-                                    dgvOrders.DataSource = newtbl;
+                                    dgvOrders.DataSource = newtbl;                                    
                                      if (!string.IsNullOrEmpty(lastimported))
                                     {
                                         DateTime importdt = Convert.ToDateTime(lastimported);
@@ -100,7 +100,7 @@ namespace Default
                                 }
                             }
                             else
-                            {
+                            {                               
                                 dgvOrders.DataSource = datatable;                                
                                  if (!string.IsNullOrEmpty(lastimported))
                                 {
@@ -120,17 +120,21 @@ namespace Default
                         {
                            var objClient = new RedCapClient();
                             DataTable apitbl = objClient.GetData(url, token, formname);
-                            string qry = "condition not in (" + excludeConditions + ")";
-                            var rows = apitbl.Select(qry);
-                            if (rows.Length > 0)
+                            if (!string.IsNullOrEmpty(excludeConditions))
                             {
-                                DataTable newtbl = apitbl.Clone();
-                                foreach (DataRow row1 in rows)
+                                string qry = "condition not in (" + excludeConditions + ")";
+
+                                var rows = apitbl.Select(qry);
+                                if (rows.Length > 0)
                                 {
-                                    newtbl.ImportRow(row1);
+                                    DataTable newtbl = apitbl.Clone();
+                                    foreach (DataRow row1 in rows)
+                                    {
+                                        newtbl.ImportRow(row1);
+                                    }
+                                    newtbl.DefaultView.Sort = "record_id asc";
+                                    dgvOrders.DataSource = newtbl;
                                 }
-                                newtbl.DefaultView.Sort = "record_id asc";
-                                dgvOrders.DataSource = newtbl;
                             }
                             else
                             {
@@ -177,6 +181,13 @@ namespace Default
             _cbHeader.OnCheckBoxClicked += cbHeader_OnCheckBoxClicked;
             colCb.HeaderCell = _cbHeader;
             dgvOrders.Columns.Insert(0, colCb);
+
+            var colCb1 = new DataGridViewCheckBoxColumn { Width = 120, Frozen = false };
+            var _cbHeader1 = new DataGridViewColumnHeaderCell();
+            _cbHeader1.Value = "Ongoing_Case";
+           // _cbHeader.OnCheckBoxClicked += cbHeader_OnCheckBoxClicked;
+            colCb1.HeaderCell = _cbHeader1;
+            dgvOrders.Columns.Insert(2, colCb1);
         }
 
         void cbHeader_OnCheckBoxClicked(bool state)
@@ -190,6 +201,13 @@ namespace Default
             Application.DoEvents();
         }
 
+        public static String toStringYesNo(bool bstr)
+        {
+            return bstr ? "YES" : "NULL";
+
+        }
+
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -197,7 +215,7 @@ namespace Default
                 bool anyerrors = false;
                 if (dgvOrders.Rows.Count > 0)
                 {
-                    DataTable tbl = _objSql.LoadFieldMappings1(Convert.ToString(cmbConfigList.SelectedItem));
+                    DataTable tbl = _objSql.LoadFieldMappings1(Convert.ToString(cmbConfigList.SelectedItem));                   
                     if (tbl != null && tbl.Rows.Count > 0)
                     {
                         var rows =
@@ -213,7 +231,8 @@ namespace Default
                                     string columnNm = Convert.ToString(drow["Column_NM"]);
                                     string apiFieldName = Convert.ToString(drow["Source_Fld_NM"]);
                                     string nbsFldNm = Convert.ToString(drow["NBS_Fld_NM"]);
-
+                                    string datasource= Convert.ToString(drow["DataSource"]);
+                                    string configid = Convert.ToString(drow["Config_id"]);                                  
                                     string value = Convert.ToString(dgrow.Cells[apiFieldName].Value);
                                     if (!string.IsNullOrEmpty(value))
                                     {
@@ -223,13 +242,10 @@ namespace Default
                                                 ColumnName = columnNm,
                                                 ApiValue = value.Replace("_", "-")
                                             };
-                                        mapping.NbsFieldName = nbsFldNm;
-                                        if (tbl.Columns.Contains("record_id"))
-                                        {
-                                            mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
-                                            mapping.DocumentId = _siteOid + "^" +
-                                                                 Convert.ToString(dgrow.Cells["record_id"].Value);
-                                        }
+                                        mapping.NbsFieldName = nbsFldNm;                                       
+                                        mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
+                                        mapping.DocumentId = _siteOid + "^" +
+                                                                 Convert.ToString(dgrow.Cells["record_id"].Value);                                        
                                         mapping.DocTypeCd = _siteOid + "^" + DateTime.Now.ToString("yyyy-MM-dd");
                                         mapping.EffectiveTime = DateTime.Now.ToString();
                                         mapping.RecordStatusCd = CommonData.Credentials.RecordStatus;
@@ -237,11 +253,14 @@ namespace Default
                                         mapping.MsgContainerStartId = CommonData.Credentials.MsgContainerStartId;
                                         mapping.PatLocalId = CommonData.Credentials.PatLocalId;
                                         mapping.InvLocalId = CommonData.Credentials.InvLocalId;
+                                        mapping.DataSource = datasource;
+                                        mapping.ConfigId = configid;
+                                        mapping.Ongoing_case= toStringYesNo(Convert.ToBoolean(dgrow.Cells[2].Value));
                                         mapList.Add(mapping);
                                     }
                                 }
 
-                                if (_objSql.InsertApiValues(mapList))
+                                if (_objSql.InsertApiValues1(mapList))
                                 {
                                     string formName = Convert.ToString(cmbConfigList.SelectedItem);
                                     DataTable dt = _objSql.ReadSettings(formName);
@@ -251,10 +270,11 @@ namespace Default
                                         {                                            
                                             string formname = Convert.ToString(row["form_nm"]);                                          
                                             string datasource = Convert.ToString(row["datasource"]);
-                                            string id = Convert.ToString(row["Config_id"]);                                          
+                                            string id = Convert.ToString(row["Config_id"]);                                         
                                             if (datasource == "Epi Info")
                                             {
                                                 _objSql.UpdateConfig(id);
+                                                dgrow.DefaultCellStyle.ForeColor = Color.Gray;                                                                                                                                          
                                             }
                                         }
                                     }
@@ -270,15 +290,15 @@ namespace Default
 
                 if (anyerrors)
                 {
-                    CommonData.ShowMessage("Not all the selected records are inserted successfully. See error log.",
+                    CommonData.ShowMessage("Not all the selected records were exported successfully. See error log.",
                                                                                               CommonData.MsgBoxType.Error);
-                    UpdateStatus("Not all the selected records are inserted successfully. See error log.");
+                    UpdateStatus("Not all the selected records were exported successfully. See error log.");
                 }
                 else
                 {
-                    CommonData.ShowMessage("All the selected records are inserted successfully.",
+                    CommonData.ShowMessage("All the selected records were successfully exported to NBS database.",
                                                          CommonData.MsgBoxType.Info);
-                    UpdateStatus("All the selected records are inserted successfully.");
+                    UpdateStatus("All the selected records were successfully exported to NBS database.");
                 }
             }
             catch (Exception ex)

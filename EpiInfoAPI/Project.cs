@@ -15,9 +15,18 @@ namespace EpiInfoAPI
 
         private XmlDocument xmlDoc = null;
         private string collectedDataConnectionString;
-        public static readonly string passPhrase = "80787d6053694493be171dd712e51c61";
-        public static readonly string saltValue = "476ba16073764022bc7f262c6d67ebef";
-        public static readonly string initVector = "0f8f*d5bd&cb4~9f";
+        private const string passPhrase = "80787d6053694493be171dd712e51c61";
+        private const string saltValue = "476ba16073764022bc7f262c6d67ebef";
+        private const string initVector = "0f8f*d5bd&cb4~9f";
+        private const string passPhraseDebug = "80787d6053694493be171dd712e51c61";
+        private const string saltValueDebug = "476ba16073764022bc7f262c6d67ebef";
+        private const string initVectorDebug = "0f8f*d5bd&cb4~9f";
+
+        private const string saltValueAltDebug = "JrudNkxXEzUj3Ij9KhHfzlZyonwVW45b";
+        private const string initVectorAltDebug = ":!0wn4f#;FHy>Yi;";
+
+        private const string initVectorDroidDebug = "00000000000000000000000000000000";
+        private const string saltDroidDebug = "00000000000000000000";
 
         #region members
         public string FilePath
@@ -137,7 +146,7 @@ namespace EpiInfoAPI
                     {
                         case "Epi.Data.Office.AccessDBFactory":
                               this.CollectedDataDriver = "Epi.Data.Office.AccessDBFactory, Epi.Data.Office";
-                              accessdbFactory = new AccessDBFactory(filePath);
+                              accessdbFactory = new AccessDBFactory(collectedDataConnectionString);
                               break;
                         case "Epi.Data.SqlServer.SqlDBFactory":
                         default:
@@ -165,22 +174,55 @@ namespace EpiInfoAPI
 
         public static string Decrypt(string cipherText)
         {
-            byte[] initVectorBytes = Encoding.ASCII.GetBytes(initVector);
-            byte[] saltValueBytes = Encoding.ASCII.GetBytes(saltValue);
-            byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
-            PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, saltValueBytes, "MD5", 1);
-            byte[] keyBytes = password.GetBytes(16);
-            RijndaelManaged symmetricKey = new RijndaelManaged();
-            symmetricKey.Mode = CipherMode.CBC;
-            ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
-            MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-            byte[] plainTextBytes = new byte[cipherTextBytes.Length];
-            int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
-            memoryStream.Close();
-            cryptoStream.Close();
-            string plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
-            return plainText;
+            try
+            {
+                byte[] initVectorBytes = Encoding.ASCII.GetBytes(initVector);
+                byte[] saltValueBytes = Encoding.ASCII.GetBytes(saltValue);
+                byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
+                PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, saltValueBytes, "MD5", 1);
+                byte[] keyBytes = password.GetBytes(16);
+                RijndaelManaged symmetricKey = new RijndaelManaged();
+                symmetricKey.Mode = CipherMode.CBC;
+                ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
+                string plainText = string.Empty;
+                MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+                // CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+                // byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+                // int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                // memoryStream.Close();
+                // cryptoStream.Close();
+                // string plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                {
+                    byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+                    int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                    memoryStream.Close();
+                    plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                }
+                return plainText;
+            }
+            catch
+            {
+                byte[] initVectorBytes = Encoding.ASCII.GetBytes(initVectorDebug);
+                byte[] saltValueBytes = Encoding.ASCII.GetBytes(saltValueDebug);
+                byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
+                PasswordDeriveBytes password = new PasswordDeriveBytes(passPhraseDebug, saltValueBytes, "MD5", 1);
+                byte[] keyBytes = password.GetBytes(16);
+                RijndaelManaged symmetricKey = new RijndaelManaged();
+                symmetricKey.Mode = CipherMode.CBC;
+                ICryptoTransform decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
+                string plainText = string.Empty;
+                MemoryStream memoryStream = new MemoryStream(cipherTextBytes);
+                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                {
+                    byte[] plainTextBytes = new byte[cipherTextBytes.Length];
+                    int decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                    memoryStream.Close();
+                    plainText = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                }
+                return plainText;
+            }
+
         }
 
         public DataTable GetData()

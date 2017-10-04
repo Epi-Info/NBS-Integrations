@@ -45,6 +45,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.White;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -52,12 +53,13 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1147, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(582, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
+            this.fileToolStripMenuItem.BackColor = System.Drawing.Color.White;
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnTest});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -67,8 +69,8 @@
             // btnTest
             // 
             this.btnTest.Name = "btnTest";
-            this.btnTest.Size = new System.Drawing.Size(220, 26);
-            this.btnTest.Text = "Test SQL Connection";
+            this.btnTest.Size = new System.Drawing.Size(249, 26);
+            this.btnTest.Text = "Manage NBS Connection";
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
             // openToolStripMenuItem
@@ -84,8 +86,8 @@
             // mainScreenToolStripMenuItem
             // 
             this.mainScreenToolStripMenuItem.Name = "mainScreenToolStripMenuItem";
-            this.mainScreenToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.mainScreenToolStripMenuItem.Text = "Main Screen";
+            this.mainScreenToolStripMenuItem.Size = new System.Drawing.Size(165, 26);
+            this.mainScreenToolStripMenuItem.Text = "Data Viewer";
             this.mainScreenToolStripMenuItem.Click += new System.EventHandler(this.mainScreenToolStripMenuItem_Click);
             // 
             // mnuSettings
@@ -94,27 +96,27 @@
             this.redCapToolStripMenuItem,
             this.epiInfoToolStripMenuItem});
             this.mnuSettings.Name = "mnuSettings";
-            this.mnuSettings.Size = new System.Drawing.Size(181, 26);
+            this.mnuSettings.Size = new System.Drawing.Size(165, 26);
             this.mnuSettings.Text = "Settings";
             // 
             // redCapToolStripMenuItem
             // 
             this.redCapToolStripMenuItem.Name = "redCapToolStripMenuItem";
-            this.redCapToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.redCapToolStripMenuItem.Text = "Red Cap";
+            this.redCapToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
+            this.redCapToolStripMenuItem.Text = "REDCap";
             this.redCapToolStripMenuItem.Click += new System.EventHandler(this.redCapToolStripMenuItem_Click);
             // 
             // epiInfoToolStripMenuItem
             // 
             this.epiInfoToolStripMenuItem.Name = "epiInfoToolStripMenuItem";
-            this.epiInfoToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.epiInfoToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
             this.epiInfoToolStripMenuItem.Text = "Epi Info";
             this.epiInfoToolStripMenuItem.Click += new System.EventHandler(this.epiInfoToolStripMenuItem_Click);
             // 
             // mnuMapping
             // 
             this.mnuMapping.Name = "mnuMapping";
-            this.mnuMapping.Size = new System.Drawing.Size(181, 26);
+            this.mnuMapping.Size = new System.Drawing.Size(165, 26);
             this.mnuMapping.Text = "Mapping";
             this.mnuMapping.Click += new System.EventHandler(this.mnuMapping_Click);
             // 
@@ -126,7 +128,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(0, 28);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1147, 634);
+            this.pictureBox1.Size = new System.Drawing.Size(582, 432);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
@@ -134,10 +136,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1147, 662);
+            this.ClientSize = new System.Drawing.Size(582, 460);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.menuStrip1);
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Splash";
