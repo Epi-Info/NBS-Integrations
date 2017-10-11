@@ -234,13 +234,19 @@ namespace Default
                                     string datasource= Convert.ToString(drow["DataSource"]);
                                     string configid = Convert.ToString(drow["Config_id"]);                                  
                                     string value = Convert.ToString(dgrow.Cells[apiFieldName].Value);
-                                    if (!string.IsNullOrEmpty(value))
+                                    string modvalue = value;
+                                    if (tblName == "MSG_PATIENT" && datasource == "Epi Info" && columnNm == "PAT_ETHNIC_GROUP_IND_CD" || columnNm == "PAT_RACE_CATEGORY_CD" && !string.IsNullOrEmpty(value))
                                     {
-                                        var mapping = new Settings.Mappings
+                                        modvalue = value.Replace(":", "-");
+                                    }
+                                        if (!string.IsNullOrEmpty(value))
+                                    {                                     
+                                            var mapping = new Settings.Mappings
                                             {
+                                               
                                                 TableName = tblName,
                                                 ColumnName = columnNm,
-                                                ApiValue = value.Replace("_", "-")
+                                                ApiValue = modvalue.Replace("_", "-")
                                             };
                                         mapping.NbsFieldName = nbsFldNm;                                       
                                         mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
@@ -285,6 +291,12 @@ namespace Default
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        CommonData.ShowMessage("Not all the selected records were exported successfully. See error log.",
+                                                                                             CommonData.MsgBoxType.Error);
+                        UpdateStatus("No Mappings creatd. See error log.");
                     }
                 }
 

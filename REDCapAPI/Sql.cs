@@ -161,7 +161,7 @@ namespace REDCapAPI
                 if (OpenConnection())
                 {
                     string qry =
-                        string.Format("select distinct question_identifier,question_display_name from MSG_QUESTION_LOOKUP");
+                        string.Format("select distinct question_identifier,question_display_name from MSG_QUESTION_LOOKUP where question_display_name is not null ");
                     var myCommand = new SqlCommand(qry, _connection);
                     var adapter = new SqlDataAdapter(myCommand);
                     var dt = new DataTable();
@@ -807,6 +807,35 @@ namespace REDCapAPI
             return false;
         }
 
+        bool UpdateMsgContainerId(Settings.Mappings map,  string msgId)
+        {          
+            bool errorsOccured = false;
+            string qry = "";
+            try
+            {
+                var com = new SqlCommand();
+                com.Connection = _connection;
+                com.CommandType = CommandType.Text;
+                qry =
+                    string.Format(
+                        "update [MSG_CONTAINER]  set ONGOING_CASE='{0}',EFFECTIVE_TIME='{2}',RECORD_STATUS_TIME='{3}' where MSG_CONTAINER_UID='{1}'",
+                       map.Ongoing_case, msgId,map.EffectiveTime,map.RecordStatusTime);
+                com.CommandText = qry;
+                com.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Log.WriteToErrorLog("Error in qry: " + qry);
+                Log.WriteToErrorLog(ex);
+                errorsOccured = true;
+            }
+            if (!errorsOccured)
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         public bool InsertApiValues(IEnumerable<Settings.Mappings> mapList)
         {
@@ -1053,8 +1082,10 @@ namespace REDCapAPI
                                                     MsgID = msgId;
                                                     query = qry.Replace("values(", "values(" + MsgID);
                                                 }
-                                                //if (OpenConnection())
-                                                // {
+                                                else
+                                                {
+                                                    UpdateMsgContainerId(mapList.First(), MsgID);
+                                                }
                                                 com.CommandText = query;
                                                 com.ExecuteNonQuery();
                                                 // }
@@ -1076,8 +1107,10 @@ namespace REDCapAPI
                                 MsgID = msgId;
                                 query= qry.Replace("values('", "values('" + MsgID);
                             }
-                            //  if (OpenConnection())
-                            //{
+                            else
+                            {
+                                UpdateMsgContainerId(mapList.First(), MsgID);
+                            }
                             com.CommandText = query;
                             com.ExecuteNonQuery();
                             // }

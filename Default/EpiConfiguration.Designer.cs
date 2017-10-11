@@ -60,7 +60,7 @@
             this.btn_Browse.BackColor = System.Drawing.Color.SteelBlue;
             this.btn_Browse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Browse.ForeColor = System.Drawing.Color.White;
-            this.btn_Browse.Location = new System.Drawing.Point(425, 624);
+            this.btn_Browse.Location = new System.Drawing.Point(195, 631);
             this.btn_Browse.Name = "btn_Browse";
             this.btn_Browse.Size = new System.Drawing.Size(168, 45);
             this.btn_Browse.TabIndex = 0;
@@ -160,7 +160,7 @@
             this.btnSave.BackColor = System.Drawing.Color.SteelBlue;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(228, 624);
+            this.btnSave.Location = new System.Drawing.Point(623, 631);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(173, 45);
             this.btnSave.TabIndex = 31;
@@ -242,7 +242,7 @@
             this.btnDelete.BackColor = System.Drawing.Color.SteelBlue;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.ForeColor = System.Drawing.Color.White;
-            this.btnDelete.Location = new System.Drawing.Point(612, 624);
+            this.btnDelete.Location = new System.Drawing.Point(444, 631);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(173, 45);
             this.btnDelete.TabIndex = 37;
@@ -255,7 +255,7 @@
             this.btnAddNew.BackColor = System.Drawing.Color.SteelBlue;
             this.btnAddNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddNew.ForeColor = System.Drawing.Color.White;
-            this.btnAddNew.Location = new System.Drawing.Point(35, 624);
+            this.btnAddNew.Location = new System.Drawing.Point(16, 631);
             this.btnAddNew.Name = "btnAddNew";
             this.btnAddNew.Size = new System.Drawing.Size(173, 45);
             this.btnAddNew.TabIndex = 38;
@@ -306,6 +306,7 @@
             this.Controls.Add(this.btn_Browse);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "EpiConfiguration";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EpiConfiguration";
             ((System.ComponentModel.ISupportInitialize)(this.dgvConfig)).EndInit();
             this.ResumeLayout(false);

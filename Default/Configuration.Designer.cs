@@ -94,7 +94,7 @@
             this.btnSave.BackColor = System.Drawing.Color.SteelBlue;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(218, 684);
+            this.btnSave.Location = new System.Drawing.Point(637, 694);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(173, 48);
             this.btnSave.TabIndex = 7;
@@ -224,7 +224,7 @@
             this.btnDelete.BackColor = System.Drawing.Color.SteelBlue;
             this.btnDelete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelete.ForeColor = System.Drawing.Color.White;
-            this.btnDelete.Location = new System.Drawing.Point(619, 684);
+            this.btnDelete.Location = new System.Drawing.Point(458, 694);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(173, 48);
             this.btnDelete.TabIndex = 9;
@@ -237,7 +237,7 @@
             this.btnReset.BackColor = System.Drawing.Color.SteelBlue;
             this.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReset.ForeColor = System.Drawing.Color.White;
-            this.btnReset.Location = new System.Drawing.Point(17, 684);
+            this.btnReset.Location = new System.Drawing.Point(13, 694);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(173, 48);
             this.btnReset.TabIndex = 8;
@@ -279,7 +279,7 @@
             this.btnEdit.BackColor = System.Drawing.Color.SteelBlue;
             this.btnEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEdit.ForeColor = System.Drawing.Color.White;
-            this.btnEdit.Location = new System.Drawing.Point(419, 684);
+            this.btnEdit.Location = new System.Drawing.Point(192, 694);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(173, 48);
             this.btnEdit.TabIndex = 23;

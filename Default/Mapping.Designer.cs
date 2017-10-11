@@ -40,6 +40,12 @@
             this.cmbNbsCn = new System.Windows.Forms.ComboBox();
             this.btnAdd = new System.Windows.Forms.Button();
             this.dgvValues = new System.Windows.Forms.DataGridView();
+            this.clmSelect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.clmFldMapId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmRcde = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmNbsDe = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmNbsTn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmNbsCn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,12 +59,6 @@
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmSelect = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.clmFldMapId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmRcde = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmNbsDe = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmNbsTn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clmNbsCn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvValues)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,7 +67,7 @@
             this.btnSave.BackColor = System.Drawing.Color.SteelBlue;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(839, 690);
+            this.btnSave.Location = new System.Drawing.Point(899, 700);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(173, 48);
             this.btnSave.TabIndex = 4;
@@ -159,7 +159,7 @@
             this.btnAdd.BackColor = System.Drawing.Color.SteelBlue;
             this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAdd.ForeColor = System.Drawing.Color.White;
-            this.btnAdd.Location = new System.Drawing.Point(40, 691);
+            this.btnAdd.Location = new System.Drawing.Point(10, 700);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(173, 48);
             this.btnAdd.TabIndex = 13;
@@ -190,12 +190,47 @@
             this.dgvValues.Size = new System.Drawing.Size(1062, 306);
             this.dgvValues.TabIndex = 14;
             // 
+            // clmSelect
+            // 
+            this.clmSelect.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.clmSelect.HeaderText = "";
+            this.clmSelect.Name = "clmSelect";
+            this.clmSelect.Width = 5;
+            // 
+            // clmFldMapId
+            // 
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            this.clmFldMapId.DefaultCellStyle = dataGridViewCellStyle3;
+            this.clmFldMapId.HeaderText = "Column1";
+            this.clmFldMapId.Name = "clmFldMapId";
+            this.clmFldMapId.Visible = false;
+            // 
+            // clmRcde
+            // 
+            this.clmRcde.HeaderText = "Source Data Element";
+            this.clmRcde.Name = "clmRcde";
+            // 
+            // clmNbsDe
+            // 
+            this.clmNbsDe.HeaderText = "NBS Data Element";
+            this.clmNbsDe.Name = "clmNbsDe";
+            // 
+            // clmNbsTn
+            // 
+            this.clmNbsTn.HeaderText = "NBS Table Name";
+            this.clmNbsTn.Name = "clmNbsTn";
+            // 
+            // clmNbsCn
+            // 
+            this.clmNbsCn.HeaderText = "NBS Column Name";
+            this.clmNbsCn.Name = "clmNbsCn";
+            // 
             // btnRemove
             // 
             this.btnRemove.BackColor = System.Drawing.Color.SteelBlue;
             this.btnRemove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRemove.ForeColor = System.Drawing.Color.White;
-            this.btnRemove.Location = new System.Drawing.Point(243, 691);
+            this.btnRemove.Location = new System.Drawing.Point(189, 700);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(173, 48);
             this.btnRemove.TabIndex = 15;
@@ -208,7 +243,7 @@
             this.btnReset.BackColor = System.Drawing.Color.SteelBlue;
             this.btnReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReset.ForeColor = System.Drawing.Color.White;
-            this.btnReset.Location = new System.Drawing.Point(649, 690);
+            this.btnReset.Location = new System.Drawing.Point(720, 700);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(173, 48);
             this.btnReset.TabIndex = 16;
@@ -241,7 +276,7 @@
             this.btnDelFromDb.BackColor = System.Drawing.Color.SteelBlue;
             this.btnDelFromDb.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDelFromDb.ForeColor = System.Drawing.Color.White;
-            this.btnDelFromDb.Location = new System.Drawing.Point(453, 691);
+            this.btnDelFromDb.Location = new System.Drawing.Point(368, 700);
             this.btnDelFromDb.Name = "btnDelFromDb";
             this.btnDelFromDb.Size = new System.Drawing.Size(173, 48);
             this.btnDelFromDb.TabIndex = 20;
@@ -309,47 +344,12 @@
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             this.dataGridViewTextBoxColumn5.Width = 212;
             // 
-            // clmSelect
-            // 
-            this.clmSelect.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.clmSelect.HeaderText = "";
-            this.clmSelect.Name = "clmSelect";
-            this.clmSelect.Width = 5;
-            // 
-            // clmFldMapId
-            // 
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            this.clmFldMapId.DefaultCellStyle = dataGridViewCellStyle3;
-            this.clmFldMapId.HeaderText = "Column1";
-            this.clmFldMapId.Name = "clmFldMapId";
-            this.clmFldMapId.Visible = false;
-            // 
-            // clmRcde
-            // 
-            this.clmRcde.HeaderText = "Source Data Element";
-            this.clmRcde.Name = "clmRcde";
-            // 
-            // clmNbsDe
-            // 
-            this.clmNbsDe.HeaderText = "NBS Data Element";
-            this.clmNbsDe.Name = "clmNbsDe";
-            // 
-            // clmNbsTn
-            // 
-            this.clmNbsTn.HeaderText = "NBS Table Name";
-            this.clmNbsTn.Name = "clmNbsTn";
-            // 
-            // clmNbsCn
-            // 
-            this.clmNbsCn.HeaderText = "NBS Column Name";
-            this.clmNbsCn.Name = "clmNbsCn";
-            // 
             // Mapping
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1084, 751);
+            this.ClientSize = new System.Drawing.Size(1084, 758);
             this.Controls.Add(this.txtDataElemSearch);
             this.Controls.Add(this.txtRedSearch);
             this.Controls.Add(this.btnDelFromDb);

@@ -478,14 +478,11 @@ namespace Default
                         }
 
                         try
-                        {
-                            //while (true)
-                            //{                              
+                        {                                                        
                                     foreach (DataGridViewRow row in rows)
                                     {
                                         dgvValues.Rows.Remove(row);
-                                    }                              
-                           // }
+                                    }                                                         
                         }
                         catch (Exception ex)
                         {
