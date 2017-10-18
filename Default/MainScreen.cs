@@ -184,7 +184,7 @@ namespace Default
 
             var colCb1 = new DataGridViewCheckBoxColumn { Width = 120, Frozen = false };
             var _cbHeader1 = new DataGridViewColumnHeaderCell();
-            _cbHeader1.Value = "Ongoing_Case";
+            _cbHeader1.Value = "Create Case";
            // _cbHeader.OnCheckBoxClicked += cbHeader_OnCheckBoxClicked;
             colCb1.HeaderCell = _cbHeader1;
             dgvOrders.Columns.Insert(2, colCb1);

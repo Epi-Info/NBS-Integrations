@@ -67,13 +67,15 @@ namespace Default
         {
             UpdateStatus("Please wait.. It is opening...");
             Mapping objMaps = new Mapping();
-            objMaps.ShowDialog(this);
+            //objMaps.ShowDialog(this);
+            objMaps.Show();
         }
 
         private void mainScreenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MainScreen mainObj = new MainScreen();
-            mainObj.ShowDialog(this);
+            //  mainObj.ShowDialog(this); 
+            mainObj.Show();
         }
 
         private void redCapToolStripMenuItem_Click(object sender, EventArgs e)
@@ -88,6 +90,11 @@ namespace Default
             var objSettings = new EpiConfiguration();
             objSettings.ShowDialog(this);           
                 
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSave = new System.Windows.Forms.Button();
             this.lbRcDe = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -199,8 +199,8 @@
             // 
             // clmFldMapId
             // 
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            this.clmFldMapId.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            this.clmFldMapId.DefaultCellStyle = dataGridViewCellStyle2;
             this.clmFldMapId.HeaderText = "Column1";
             this.clmFldMapId.Name = "clmFldMapId";
             this.clmFldMapId.Visible = false;
@@ -368,9 +368,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbRcDe);
             this.Controls.Add(this.btnSave);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Mapping";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
