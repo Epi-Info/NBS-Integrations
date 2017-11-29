@@ -227,42 +227,49 @@ namespace Default
                                 var mapList = new List<Settings.Mappings>();
                                 foreach (DataRow drow in tbl.Rows)
                                 {
-                                    string tblName = Convert.ToString(drow["Table_NM"]);
-                                    string columnNm = Convert.ToString(drow["Column_NM"]);
-                                    string apiFieldName = Convert.ToString(drow["Source_Fld_NM"]);
-                                    string nbsFldNm = Convert.ToString(drow["NBS_Fld_NM"]);
-                                    string datasource= Convert.ToString(drow["DataSource"]);
-                                    string configid = Convert.ToString(drow["Config_id"]);                                  
-                                    string value = Convert.ToString(dgrow.Cells[apiFieldName].Value);
-                                    string modvalue = value;
-                                    if (tblName == "MSG_PATIENT" && datasource == "Epi Info" && columnNm == "PAT_ETHNIC_GROUP_IND_CD" || columnNm == "PAT_RACE_CATEGORY_CD" && !string.IsNullOrEmpty(value))
+                                    try
                                     {
-                                        modvalue = value.Replace(":", "-");
-                                    }
+                                        string tblName = Convert.ToString(drow["Table_NM"]);
+                                        string columnNm = Convert.ToString(drow["Column_NM"]);
+                                        string apiFieldName = Convert.ToString(drow["Source_Fld_NM"]);
+                                        string nbsFldNm = Convert.ToString(drow["NBS_Fld_NM"]);
+                                        string datasource = Convert.ToString(drow["DataSource"]);
+                                        string configid = Convert.ToString(drow["Config_id"]);
+                                        string value = Convert.ToString(dgrow.Cells[apiFieldName].Value);
+                                        string modvalue = value;
+                                        if (tblName == "MSG_PATIENT" && datasource == "Epi Info" && columnNm == "PAT_ETHNIC_GROUP_IND_CD" || columnNm == "PAT_RACE_CATEGORY_CD" && !string.IsNullOrEmpty(value))
+                                        {
+                                            modvalue = value.Replace(":", "-");
+                                        }
                                         if (!string.IsNullOrEmpty(value))
-                                    {                                     
+                                        {
                                             var mapping = new Settings.Mappings
                                             {
-                                               
+
                                                 TableName = tblName,
                                                 ColumnName = columnNm,
                                                 ApiValue = modvalue.Replace("_", "-")
                                             };
-                                        mapping.NbsFieldName = nbsFldNm;                                       
-                                        mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
-                                        mapping.DocumentId = _siteOid + "^" +
-                                                                 Convert.ToString(dgrow.Cells["record_id"].Value);                                        
-                                        mapping.DocTypeCd = _siteOid + "^" + DateTime.Now.ToString("yyyy-MM-dd");
-                                        mapping.EffectiveTime = DateTime.Now.ToString();
-                                        mapping.RecordStatusCd = CommonData.Credentials.RecordStatus;
-                                        mapping.RecordStatusTime = DateTime.Now.ToString();
-                                        mapping.MsgContainerStartId = CommonData.Credentials.MsgContainerStartId;
-                                        mapping.PatLocalId = CommonData.Credentials.PatLocalId;
-                                        mapping.InvLocalId = CommonData.Credentials.InvLocalId;
-                                        mapping.DataSource = datasource;
-                                        mapping.ConfigId = configid;
-                                        mapping.Ongoing_case= toStringYesNo(Convert.ToBoolean(dgrow.Cells[2].Value));
-                                        mapList.Add(mapping);
+                                            mapping.NbsFieldName = nbsFldNm;
+                                            mapping.RecordId = Convert.ToString(dgrow.Cells["record_id"].Value);
+                                            mapping.DocumentId = _siteOid + "^" +
+                                                                     Convert.ToString(dgrow.Cells["record_id"].Value);
+                                            mapping.DocTypeCd = _siteOid + "^" + DateTime.Now.ToString("yyyy-MM-dd");
+                                            mapping.EffectiveTime = DateTime.Now.ToString();
+                                            mapping.RecordStatusCd = CommonData.Credentials.RecordStatus;
+                                            mapping.RecordStatusTime = DateTime.Now.ToString();
+                                            mapping.MsgContainerStartId = CommonData.Credentials.MsgContainerStartId;
+                                            mapping.PatLocalId = CommonData.Credentials.PatLocalId;
+                                            mapping.InvLocalId = CommonData.Credentials.InvLocalId;
+                                            mapping.DataSource = datasource;
+                                            mapping.ConfigId = configid;
+                                            mapping.Ongoing_case = toStringYesNo(Convert.ToBoolean(dgrow.Cells[2].Value));
+                                            mapList.Add(mapping);
+                                        }
+                                    }
+                                    catch(Exception ex)
+                                    {
+
                                     }
                                 }
 

@@ -73,6 +73,12 @@
     <Compile Include="Connection.Designer.cs">
       <DependentUpon>Connection.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateLookup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateLookup.Designer.cs">
+      <DependentUpon>CreateLookup.cs</DependentUpon>
+    </Compile>
     <Compile Include="DatagridViewCheckBoxHeaderCell.cs" />
     <Compile Include="EpiConfiguration.cs">
       <SubType>Form</SubType>
@@ -108,6 +114,9 @@
     </Compile>
     <EmbeddedResource Include="Connection.resx">
       <DependentUpon>Connection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateLookup.resx">
+      <DependentUpon>CreateLookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EpiConfiguration.resx">
       <DependentUpon>EpiConfiguration.cs</DependentUpon>

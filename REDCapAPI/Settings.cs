@@ -65,6 +65,26 @@ namespace REDCapAPI
             public List<Mappings> LineItems  { get; set; }
         }
 
+        public struct QuestioLookup
+        {
+            public string DocTypeId { get; set; }
+            public string DocTypeVersionTxt { get; set; }
+            public string QuesCodeSysCD { get; set; }
+            public string QuesCodeSysDescTxt { get; set; }
+            public string Data_Type { get; set; }
+            public string QuesIdentifier { get; set; }
+            public string QuesDisplayName { get; set; }
+            public string SendingSysCD { get; set; }
+
+            public string AnsFromCode { get; set; }
+            public string AnsFromCodeSysCD { get; set; }
+            public string AnsFromCodeSysDecsTxt { get; set; }
+            public string AnsFromDisNM { get; set; }          
+            public string CodeTransReq { get; set; }                    
+            public string InvestigationFormCd { get; set; }           
+        }
+      
+
         public Credentials ReadApiSettings()
         {
             var credentials = new Credentials();

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btnSave = new System.Windows.Forms.Button();
             this.lbRcDe = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -104,6 +104,7 @@
             this.lbNbsDe.Name = "lbNbsDe";
             this.lbNbsDe.Size = new System.Drawing.Size(383, 212);
             this.lbNbsDe.TabIndex = 7;
+            this.lbNbsDe.SelectedIndexChanged += new System.EventHandler(this.lbNbsDe_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -199,8 +200,8 @@
             // 
             // clmFldMapId
             // 
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            this.clmFldMapId.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.clmFldMapId.DefaultCellStyle = dataGridViewCellStyle1;
             this.clmFldMapId.HeaderText = "Column1";
             this.clmFldMapId.Name = "clmFldMapId";
             this.clmFldMapId.Visible = false;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using LogManager;
+using System.Data.SqlTypes;
 
 namespace REDCapAPI
 {
@@ -21,7 +22,8 @@ namespace REDCapAPI
         private static string _configPath = @"{0}\Config.xml";
         private static SqlCredentials _credentials;
         private string MsgID = "";
-      
+        private string locId = "";
+
         public Sql(string appPath, string connString)
         {
             _configPath = string.Format(FileName, appPath);
@@ -175,7 +177,7 @@ namespace REDCapAPI
             }
             finally
             {
-                CloseConnection();
+              //  CloseConnection();
             }
             return null;
         }
@@ -836,154 +838,12 @@ namespace REDCapAPI
             return false;
         }
 
-
-        public bool InsertApiValues(IEnumerable<Settings.Mappings> mapList)
-        {
-            bool errorsOccured = false;
-            try
-            {
-                if (OpenConnection())
-                {
-                    string qry = "";
-                    try
-                    {
-                        string msgId;
-                        List<string> tableNames = mapList.Select(m => m.TableName).Distinct().ToList();                      
-
-                            if (InsertMsgContainerId(mapList.First(), out msgId))
-                        {
-                            //List<string> tableNames = mapList.Select(m => m.TableName).Distinct().ToList();
-
-                            foreach (string tableName in tableNames)
-                            {
-                                var maps = mapList.Where(m => m.TableName == tableName);
-                                var clmBuilder = new StringBuilder();
-                                var valBuilder = new StringBuilder();
-                                string datasource = "";
-                                foreach (var m in maps)
-                                {
-                                    clmBuilder.Append(m.ColumnName).Append(",");
-                                    valBuilder.Append("'").Append(m.ApiValue).Append("'").Append(",");
-                                    datasource = m.DataSource;
-                                }
-                                string clmNames = clmBuilder.ToString();
-                                if (clmNames.EndsWith(","))
-                                {
-                                    clmNames = clmNames.Remove(clmNames.Length - 1, 1);
-                                }
-
-                                string clmValues = valBuilder.ToString();
-                                if (clmValues.EndsWith(","))
-                                {
-                                    clmValues = clmValues.Remove(clmValues.Length - 1, 1);
-                                }
-                                string recId = mapList.First().RecordId;
-
-                                var com = new SqlCommand();
-                                com.Connection = _connection;
-                                com.CommandType = CommandType.Text;
-                                switch (tableName)
-                                {
-                                    case "MSG_CASE_INVESTIGATION":
-                                        {
-                                            qry = Get_MSG_CASE_INVESTIGATION_Qry(recId, tableName, clmNames, msgId, clmValues, datasource);
-                                        }
-                                        break;
-                                    case "MSG_PATIENT":
-                                        {
-                                            //string patId = GetMaxPatientId(true);
-                                            //if (string.IsNullOrEmpty(patId))
-                                            //{
-                                            //    patId = mapList.First().PatLocalId;
-                                            //}
-                                            //qry = Get_MSG_PATIENT_Qry(tableName, clmNames, msgId, patId, clmValues);
-                                            qry = Get_MSG_PATIENT_Qry(tableName, clmNames, msgId, recId, clmValues, datasource);
-                                        }
-                                        break;
-                                    case "MSG_ORGANIZATION":
-                                        {
-                                            qry = Get_MSG_ORGANIZATION_Qry(tableName, clmNames, msgId, recId, "", clmValues, datasource);
-                                        }
-                                        break;
-                                    case "MSG_PLACE":
-                                        {
-                                            qry = Get_MSG_PLACE_Qry(tableName, clmNames, msgId, recId, "", clmValues, datasource);
-                                        }
-                                        break;
-                                    case "MSG_PROVIDER":
-                                        {
-                                            qry = Get_MSG_PROVIDER_Qry(tableName, clmNames, msgId, recId, "", clmValues, datasource);
-                                        }
-                                        break;
-                                    case "MSG_TREATMENT":
-                                        {
-                                            qry = Get_MSG_TREATMENT_Qry(tableName, clmNames, msgId, recId, "", clmValues, datasource);
-                                        }
-                                        break;
-                                    case "MSG_ANSWER":
-                                        {
-                                            try
-                                            {
-                                                foreach (Settings.Mappings map in mapList)
-                                                {
-                                                    string questionIdentifier = map.NbsFieldName;
-                                                    if (map.NbsFieldName.Contains("-"))
-                                                    {
-                                                        questionIdentifier = map.NbsFieldName.Split('-')[0].Trim();
-                                                    }
-                                                    qry = Get_MSG_ANSWER_Qry(questionIdentifier, msgId, recId, map.ApiValue,map.DataSource);
-                                                    com.CommandText = qry;
-                                                    com.ExecuteNonQuery();
-                                                }
-                                                return true;
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Log.WriteToErrorLog("Error in qry: " + qry);
-                                                Log.WriteToErrorLog(ex);
-                                                return false;
-                                            }
-                                        }
-                                }
-
-                                com.CommandText = qry;
-                                com.ExecuteNonQuery();
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.WriteToErrorLog("Error in qry: " + qry);
-                        Log.WriteToErrorLog(ex);
-                        errorsOccured = true;
-                    }
-                }
-
-                if (!errorsOccured)
-                {
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                Log.WriteToErrorLog(e);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return false;
-        }
-
-
-
-
         public bool InsertApiValues1(IEnumerable<Settings.Mappings> mapList)
         {
             bool errorsOccured = false;
             try
             {
-                MsgID = null;
+                MsgID = null;locId = null;
                 if (OpenConnection())
                 {
                     string qry = "";
@@ -1025,11 +885,40 @@ namespace REDCapAPI
                             com.Connection = _connection;
                             com.CommandType = CommandType.Text;
                             string query ;
+                            if (datasource == "Epi Info")
+                            {
+                                locId = "EpiInfo_" + configid + "_" + recId;
+                            }
+                            else
+                            {
+                                locId = "REDCap_" + configid + "_" + recId;
+                            }
                             switch (tableName)
                             {
                                 case "MSG_CASE_INVESTIGATION":
                                     {
-                                        qry = Get_MSG_CASE_INVESTIGATION_Qry1(recId, tableName, clmNames, clmValues, datasource, configid);
+                                        try
+                                        {
+                                            qry = Get_MSG_CASE_INVESTIGATION_Qry1(recId, tableName, clmNames, clmValues, datasource, configid);
+                                            query = qry;
+                                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                            {
+                                                InsertMsgContainerId(mapList.First(), out msgId);
+                                                MsgID = msgId;
+                                                query = qry.Replace("values('", "values('" + MsgID);
+                                            }
+                                            else
+                                            {
+                                                UpdateMsgContainerId(mapList.First(), MsgID);
+                                            }
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
                                     }
                                     break;
                                 case "MSG_PATIENT":
@@ -1039,42 +928,220 @@ namespace REDCapAPI
                                         //{
                                         //    patId = mapList.First().PatLocalId;
                                         //}
-                                        //qry = Get_MSG_PATIENT_Qry(tableName, clmNames, msgId, patId, clmValues);
+                                        //qry = Get_MSG_PATIENT_Qry(tableName, clmNames, msgId, patId, clmValues);                                      
                                         qry = Get_MSG_PATIENT_Qry1(tableName, clmNames, recId, clmValues, datasource, configid);
+                                        query = qry;
+                                        if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                        {
+                                            InsertMsgContainerId(mapList.First(), out msgId);
+                                            MsgID = msgId;
+                                            query = qry.Replace("values('", "values('" + MsgID);
+                                        }
+                                        else
+                                        {
+                                            UpdateMsgContainerId(mapList.First(), MsgID);
+                                        }
+                                        try
+                                        {
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch(Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
                                     }
                                     break;
                                 case "MSG_ORGANIZATION":
                                     {
-                                        qry = Get_MSG_ORGANIZATION_Qry1(tableName, clmNames, recId, "", clmValues, datasource,configid);
+                                        try
+                                        {
+                                            qry = Get_MSG_ORGANIZATION_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                            query = qry;
+                                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                            {
+                                                InsertMsgContainerId(mapList.First(), out msgId);
+                                                MsgID = msgId;
+                                                query = qry.Replace("values('", "values('" + MsgID);
+                                            }
+                                            else
+                                            {
+                                                UpdateMsgContainerId(mapList.First(), MsgID);
+                                            }
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
                                     }
                                     break;
                                 case "MSG_PLACE":
                                     {
-                                        qry = Get_MSG_PLACE_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                        try
+                                        {
+                                            qry = Get_MSG_PLACE_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                            query = qry;
+                                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                            {
+                                                InsertMsgContainerId(mapList.First(), out msgId);
+                                                MsgID = msgId;
+                                                query = qry.Replace("values('", "values('" + MsgID);
+                                            }
+                                            else
+                                            {
+                                                UpdateMsgContainerId(mapList.First(), MsgID);
+                                            }
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
                                     }
                                     break;
                                 case "MSG_PROVIDER":
                                     {
-                                        qry = Get_MSG_PROVIDER_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                        try
+                                        {
+                                            qry = Get_MSG_PROVIDER_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                            query = qry;
+                                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                            {
+                                                InsertMsgContainerId(mapList.First(), out msgId);
+                                                MsgID = msgId;
+                                                query = qry.Replace("values('", "values('" + MsgID);
+                                            }
+                                            else
+                                            {
+                                                UpdateMsgContainerId(mapList.First(), MsgID);
+                                            }
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
                                     }
                                     break;
                                 case "MSG_TREATMENT":
                                     {
-                                        qry = Get_MSG_TREATMENT_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                        try
+                                        {
+                                            qry = Get_MSG_TREATMENT_Qry1(tableName, clmNames, recId, "", clmValues, datasource, configid);
+                                            query = qry;
+                                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                            {
+                                                InsertMsgContainerId(mapList.First(), out msgId);
+                                                MsgID = msgId;
+                                                query = qry.Replace("values('", "values('" + MsgID);
+                                            }
+                                            else
+                                            {
+                                                UpdateMsgContainerId(mapList.First(), MsgID);
+                                            }
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
+                                    }
+                                    break;
+                                case "MSG_INTERVIEW":
+                                    {
+                                        try
+                                        {
+                                            qry = Get_MSG_INTERVIEW_Qry1(recId, tableName, clmNames, clmValues, datasource, configid);
+                                            query = qry;
+                                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
+                                            {
+                                                InsertMsgContainerId(mapList.First(), out msgId);
+                                                MsgID = msgId;
+                                                query = qry.Replace("values('", "values('" + MsgID);
+                                            }
+                                            else
+                                            {
+                                                UpdateMsgContainerId(mapList.First(), MsgID);
+                                            }
+                                            com.CommandText = query;
+                                            com.ExecuteNonQuery();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Log.WriteToErrorLog("Error in qry: " + qry);
+                                            Log.WriteToErrorLog(ex);
+                                        }
                                     }
                                     break;
                                 case "MSG_ANSWER":
                                     {
                                         try
                                         {
-                                            foreach (Settings.Mappings map in mapList)
+                                            foreach (Settings.Mappings map in maps)
                                             {
                                                 string questionIdentifier = map.NbsFieldName;
+                                                string questiondisplayname="";
                                                 if (map.NbsFieldName.Contains("-"))
                                                 {
                                                     questionIdentifier = map.NbsFieldName.Split('-')[0].Trim();
+                                                    questiondisplayname= map.NbsFieldName.Split('-')[1].Trim();
                                                 }
-                                                qry = Get_MSG_ANSWER_Qry1(questionIdentifier, recId, map.ApiValue, map.DataSource,configid);
+
+                                                DataTable dattable = Get_MSG_Lookups(questionIdentifier, questiondisplayname);
+                                                string quescode=null, quescodedesc=null, anscode=null, anscodedesc=null, ansdisptxt = null;
+                                                if (dattable.Rows.Count > 0)
+                                                {                                                    
+
+                                                    quescode = dattable.Rows[0]["QUES_CODE_SYSTEM_CD"].ToString();
+                                                    quescodedesc = dattable.Rows[0]["QUES_CODE_SYSTEM_DESC_TXT"].ToString();
+                                                    if (!string.IsNullOrEmpty(dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString()))
+                                                        anscode = dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString();
+                                                    if (!string.IsNullOrEmpty(dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString()))
+                                                        anscodedesc = dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString();
+                                                    if(!string.IsNullOrEmpty(dattable.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString()))
+                                                    ansdisptxt = dattable.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString();
+
+                                                    if (dattable.Rows[0]["DATA_TYPE"].ToString() == "CODED")
+                                                    {
+                                                        DataTable dt = Get_MSG_Ans_Lookup(questionIdentifier, map.ApiValue);
+                                                        if (dt.Rows.Count == 0)
+                                                        {
+                                                            var lookup = new Settings.QuestioLookup
+                                                            {
+
+                                                                DocTypeId = "PHDC",
+                                                                DocTypeVersionTxt = "1.3",
+                                                                QuesCodeSysCD = quescode,
+                                                                QuesCodeSysDescTxt = quescodedesc,
+                                                                Data_Type = "CODED",
+                                                                QuesIdentifier = questionIdentifier,
+                                                                QuesDisplayName = questiondisplayname,
+                                                                SendingSysCD = map.DataSource,
+
+                                                                AnsFromCode = map.ApiValue.Trim(),
+                                                                AnsFromCodeSysCD = anscode,
+                                                                AnsFromCodeSysDecsTxt = anscodedesc,
+                                                                AnsFromDisNM = ansdisptxt,
+                                                                CodeTransReq = "NO",
+                                                                InvestigationFormCd = "INV_FORM_GEN"
+                                                            };
+
+                                                            SaveAnslookup(lookup);
+                                                        }
+                                                    }
+                                                }
+
+                                                qry = Get_MSG_ANSWER_Qry1(questionIdentifier, recId, map.ApiValue, map.DataSource,configid,quescode,quescodedesc,anscode,anscodedesc,ansdisptxt, questiondisplayname);
                                                 query = qry;
                                                 if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
                                                 {
@@ -1087,43 +1154,26 @@ namespace REDCapAPI
                                                     UpdateMsgContainerId(mapList.First(), MsgID);
                                                 }
                                                 com.CommandText = query;
-                                                com.ExecuteNonQuery();
-                                                // }
-                                            }
-                                            return true;
+                                                com.ExecuteNonQuery();                                               
+                                            }                                          
                                         }
                                         catch (Exception ex)
                                         {
                                             Log.WriteToErrorLog("Error in qry: " + qry);
-                                            Log.WriteToErrorLog(ex);
-                                            return false;
+                                            Log.WriteToErrorLog(ex);                                            
                                         }
                                     }
+                                    break;
                             }
-                            query = qry;
-                            if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
-                            {                                
-                                InsertMsgContainerId(mapList.First(), out msgId);
-                                MsgID = msgId;
-                                query= qry.Replace("values('", "values('" + MsgID);
-                            }
-                            else
-                            {
-                                UpdateMsgContainerId(mapList.First(), MsgID);
-                            }
-                            com.CommandText = query;
-                            com.ExecuteNonQuery();
-                            // }
-                        }
-                        //}
+                                                 
+                        }                        
                     }
                     catch (Exception ex)
                     {
                         Log.WriteToErrorLog("Error in qry: " + qry);
                         Log.WriteToErrorLog(ex);
                         errorsOccured = true;
-                    }
-                    // }
+                    }                    
 
                     if (!errorsOccured)
                     {
@@ -1140,151 +1190,18 @@ namespace REDCapAPI
                 CloseConnection();
             }
             return false;
-        }
-
-        string Get_MSG_CASE_INVESTIGATION_Qry(string recId, string tableName, string clmNames, string msgId, string clmValues, string datasource)
-        {
-            //string patId = GetMaxPatientId(false);           
-            string locId, patId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_INV_" + recId;
-                patId = "EpiInfo_PAT_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_INV_" + recId;
-                patId = "REDCap_PAT_" + recId;
-            }
-            string qry =
-                  string.Format(
-                      "insert into {0}(MSG_CONTAINER_UID,INV_LOCAL_ID,PAT_LOCAL_ID,{1}) values('{2}','{3}','{4}',{5})",
-                      tableName, clmNames, msgId, locId, patId, clmValues);
-            return qry;
-        }
-
-        string Get_MSG_PATIENT_Qry(string tableName, string clmNames, string msgId, string recId, string clmValues, string datasource)
-        {           
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_PAT_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_PAT_" + recId;
-            }
-            string qry = string.Format(
-                "insert into {0}(MSG_CONTAINER_UID,PAT_LOCAL_ID,{1}) values('{2}','{3}',{4})",
-                tableName, clmNames, msgId, locId, clmValues);
-            return qry;
-        }
-
-        string Get_MSG_ORGANIZATION_Qry(string tableName, string clmNames, string msgId, string recId, string authorId, string clmValues, string datasource)
-        {            
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_ORG_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_ORG_" + recId;
-            }
-
-            string qry = string.Format(
-                "insert into {0}(MSG_CONTAINER_UID,ORG_LOCAL_ID,ORG_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-                tableName, clmNames, msgId, locId, authorId, clmValues);
-            return qry;
-        }
-
-        string Get_MSG_PLACE_Qry(string tableName, string clmNames, string msgId, string recId, string authorId, string clmValues, string datasource)
-        {           
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_PLA_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_PLA_" + recId;
-            }
-
-            string qry = string.Format(
-                "insert into {0}(MSG_CONTAINER_UID,PLA_LOCAL_ID,PLA_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-                tableName, clmNames, msgId, locId, authorId, clmValues);
-            return qry;
-        }
-
-        string Get_MSG_PROVIDER_Qry(string tableName, string clmNames, string msgId, string recId, string authorId, string clmValues, string datasource)
-        {           
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_PRO_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_PRO_" + recId;
-            }
-
-            string qry = string.Format(
-                "insert into {0}(MSG_CONTAINER_UID,PRV_LOCAL_ID,PRV_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-                tableName, clmNames, msgId, locId, authorId, clmValues);
-            return qry;
-        }
-
-        string Get_MSG_TREATMENT_Qry(string tableName, string clmNames, string msgId, string recId, string authorId, string clmValues, string datasource)
-        {           
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_TRE_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_TRE_" + recId;
-            }
-
-            string qry = string.Format(
-                "insert into {0}(MSG_CONTAINER_UID,TRT_LOCAL_ID,TRT_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-                tableName, clmNames, msgId, locId, authorId, clmValues);
-            return qry;
-        }
-
-        string Get_MSG_ANSWER_Qry(string quesIden, string msgId, string recId, string ansTxt,string datasource)
-        {
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_MSG_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_MSG_" + recId;
-            }
-
-            string qry = string.Format(
-                "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT) values({0},'{1}','Case','{2}','{3}')",
-                msgId, locId, quesIden, ansTxt);
-            return qry;
-        }
-
-
-
+        }      
 
         string Get_MSG_CASE_INVESTIGATION_Qry1(string recId, string tableName, string clmNames,  string clmValues, string datasource,string configid)
         {
             //string patId = GetMaxPatientId(false);           
-            string locId, patId = "";
+            string  patId = "";
             if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_INV_" + configid + "_" + recId;
+            {            
                 patId = "EpiInfo_PAT_" + configid + "_" + recId;
             }
             else
-            {
-                locId = "REDCap_INV_" + configid + "_" + recId;
+            {                
                 patId = "REDCap_PAT_" + configid + "_" + recId;
             }
             string qry = "";
@@ -1294,7 +1211,7 @@ namespace REDCapAPI
             if (CheckforUpdateQuery(qry))
             {
                 string wherecond = string.Format(" where inv_local_id = '{0}'", locId);
-                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond; ;
+                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond;
 
             }
             else
@@ -1307,152 +1224,182 @@ namespace REDCapAPI
             return qry;
         }
 
-        string Get_MSG_PATIENT_Qry1(string tableName, string clmNames, string recId, string clmValues, string datasource,string configid)
+
+        string Get_MSG_INTERVIEW_Qry1(string recId, string tableName, string clmNames, string clmValues, string datasource, string configid)
         {
-            string locId = "";
+            //string patId = GetMaxPatientId(false);           
+            string patId = "";
             if (datasource == "Epi Info")
             {
-                locId = "EpiInfo_PAT_" + configid + "_" + recId;
+                patId = "EpiInfo_PAT_" + configid + "_" + recId;
             }
             else
             {
-                locId = "REDCap_PAT_" + configid + "_" + recId;
+                patId = "REDCap_PAT_" + configid + "_" + recId;
             }
             string qry = "";
             qry = string.Format(
-              "select top 1 * from MSG_PATIENT where pat_local_id ='{0}'",
+              "select top 1 * from MSG_INTERVIEW where IXS_LOCAL_ID='{0}'",
               locId);
             if (CheckforUpdateQuery(qry))
             {
-                string wherecond = string.Format(" where pat_local_id = '{0}'", locId);
-                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond; ;
+                string wherecond = string.Format(" where inv_local_id = '{0}'", locId);
+                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond;
 
+            }
+            else
+            {
+                qry =
+                 string.Format(
+                     "insert into {0}(MSG_CONTAINER_UID,IXS_LOCAL_ID,IXS_INTERVIEWEE_ID,{1}) values('{2}','{3}','{4}',{5})",
+                     tableName, clmNames, MsgID, locId, patId, clmValues);
+            }
+            return qry;
+        }
+
+
+        string Get_MSG_PATIENT_Qry1(string tableName, string clmNames, string recId, string clmValues, string datasource,string configid)
+        {
+
+            string qry = "" , patId = ""; ;
+            if (datasource == "Epi Info")
+            {
+                patId = "EpiInfo_PAT_" + configid + "_" + recId;
+            }
+            else
+            {
+                patId = "REDCap_PAT_" + configid + "_" + recId;
+            }
+            qry = string.Format(
+              "select top 1 * from MSG_PATIENT where pat_local_id ='{0}'",
+              patId);
+            if (CheckforUpdateQuery(qry))
+            {
+                string wherecond = string.Format(" where pat_local_id = '{0}'", patId);
+                qry = GetUpdateQuery(tableName, clmNames, patId, clmValues) + wherecond; 
             }
             else
             {
                  qry = string.Format(
                 "insert into {0}(MSG_CONTAINER_UID,PAT_LOCAL_ID,{1}) values('{2}','{3}',{4})",
-                tableName, clmNames, MsgID, locId, clmValues);
+                tableName, clmNames, MsgID, patId, clmValues);
             }
             return qry;
         }
 
         string Get_MSG_ORGANIZATION_Qry1(string tableName, string clmNames,  string recId, string authorId, string clmValues, string datasource,string configid)
         {
-            string locId = "";
+            string qry = "", orgId = "";
             if (datasource == "Epi Info")
             {
-                locId = "EpiInfo_ORG_" + configid + "_" + recId;
+                orgId = "EpiInfo_ORG_" + configid + "_" + recId;
             }
             else
             {
-                locId = "REDCap_ORG_" + configid + "_" + recId;
+                orgId = "REDCap_ORG_" + configid + "_" + recId;
             }
-            string qry = "";
             qry = string.Format(
               "select top 1 * from  MSG_ORGANIZATION  where org_local_id ='{0}'",
-              locId);
+              orgId);
             if (CheckforUpdateQuery(qry))
             {
-                string wherecond = string.Format(" where org_local_id = '{0}'", locId);
-                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond; 
+                string wherecond = string.Format(" where org_local_id = '{0}'", orgId);
+                qry = GetUpdateQuery(tableName, clmNames, orgId, clmValues) + wherecond; 
 
             }
             else
             {
                 qry = string.Format(
                "insert into {0}(MSG_CONTAINER_UID,ORG_LOCAL_ID,ORG_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-               tableName, clmNames, MsgID, locId, authorId, clmValues);
+               tableName, clmNames, MsgID, orgId, authorId, clmValues);
             }
             return qry;
         }
 
         string Get_MSG_PLACE_Qry1(string tableName, string clmNames,  string recId, string authorId, string clmValues, string datasource,string configid)
-        {
-            string locId = "";
+        {          
+            string qry = "", plaId = "";
             if (datasource == "Epi Info")
             {
-                locId = "EpiInfo_PLA_" + configid + "_" + recId;
+                plaId = "EpiInfo_PLA_" + configid + "_" + recId;
             }
             else
             {
-                locId = "REDCap_PLA_" + configid + "_" + recId;
+                plaId = "REDCap_PLA_" + configid + "_" + recId;
             }
-            string qry = "";
             qry = string.Format(
               "select top 1 * from MSG_PLACE where pla_local_id ='{0}'",
-              locId);
+              plaId);
             if (CheckforUpdateQuery(qry))
             {
-                string wherecond = string.Format(" where pla_local_id = '{0}'", locId);
-                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond; 
+                string wherecond = string.Format(" where pla_local_id = '{0}'", plaId);
+                qry = GetUpdateQuery(tableName, clmNames, plaId, clmValues) + wherecond; 
 
             }
             else
             {
                 qry = string.Format(
                "insert into {0}(MSG_CONTAINER_UID,PLA_LOCAL_ID,PLA_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-               tableName, clmNames, MsgID, locId, authorId, clmValues);
+               tableName, clmNames, MsgID, plaId, authorId, clmValues);
             }
             return qry;
         }
 
         string Get_MSG_PROVIDER_Qry1(string tableName, string clmNames,  string recId, string authorId, string clmValues, string datasource,string configid)
-        {
-            string locId = "";
+        {          
+            string qry = "", prvId = "";
             if (datasource == "Epi Info")
             {
-                locId = "EpiInfo_PRO_"+configid+"_" + recId;
+                prvId = "EpiInfo_PRV_" + configid + "_" + recId;
             }
             else
             {
-                locId = "REDCap_PRO_" + configid + "_" + recId;
+                prvId = "REDCap_PRV_" + configid + "_" + recId;
             }
-            string qry = "";
+
             qry = string.Format(
               "select top 1 * from MSG_PROVIDER where prv_local_id='{0}'",
-              locId);
+              prvId);
             if (CheckforUpdateQuery(qry))
             {
-                string wherecond = string.Format(" where prv_local_id = '{0}'", locId);
-                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond; 
+                string wherecond = string.Format(" where prv_local_id = '{0}'", prvId);
+                qry = GetUpdateQuery(tableName, clmNames, prvId, clmValues) + wherecond; 
 
             }
             else
             {
                 qry = string.Format(
                 "insert into {0}(MSG_CONTAINER_UID,PRV_LOCAL_ID,PRV_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-                tableName, clmNames, MsgID, locId, authorId, clmValues);
+                tableName, clmNames, MsgID, prvId, authorId, clmValues);
             }
             return qry;
         }
 
         string Get_MSG_TREATMENT_Qry1(string tableName, string clmNames, string recId, string authorId, string clmValues, string datasource,string configid)
-        {
-            string locId = "";
+        {           
+            string qry = "", trtId = "";
             if (datasource == "Epi Info")
             {
-                locId = "EpiInfo_TRE_"+ configid+"_" + recId;
+                trtId = "EpiInfo_TRT_" + configid + "_" + recId;
             }
             else
             {
-                locId = "REDCap_TRE_" + configid + "_" + recId;
+                trtId = "REDCap_TRT_" + configid + "_" + recId;
             }
-            string qry = "";
             qry = string.Format(
               "select top 1 * from MSG_TREATMENT where trt_local_id ='{0}'",
-             locId);
+             trtId);
             if (CheckforUpdateQuery(qry))
             {
-                string wherecond = string.Format(" where trt_local_id = '{0}'", locId);
-                qry = GetUpdateQuery(tableName, clmNames, locId, clmValues) + wherecond;
+                string wherecond = string.Format(" where trt_local_id = '{0}'", trtId);
+                qry = GetUpdateQuery(tableName, clmNames, trtId, clmValues) + wherecond;
 
             }
             else
             {
                 qry = string.Format(
                 "insert into {0}(MSG_CONTAINER_UID,TRT_LOCAL_ID,TRT_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
-                tableName, clmNames, MsgID, locId, authorId, clmValues);
+                tableName, clmNames, MsgID, trtId, authorId, clmValues);
             }
             return qry;
         }
@@ -1480,34 +1427,123 @@ namespace REDCapAPI
             return querystring;
         }
 
-        string Get_MSG_ANSWER_Qry1(string quesIden, string recId, string ansTxt, string datasource,string configid)
+        DataTable Get_MSG_Lookups(string quesIden, string quesdispnm)
+        {            
+            string qry = "";
+            qry = string.Format(
+              "  select top 1 MQ.QUES_CODE_SYSTEM_CD,QUES_CODE_SYSTEM_DESC_TXT,"+
+      " [ANS_FROM_CODE_SYSTEM_CD],[ANS_FROM_CODE_SYSTEM_DESC_TXT] ,[ANS_FROM_DISPLAY_NM], [DATA_TYPE] from MSG_QUESTION_LOOKUP MQ " +      
+        "left outer join MSG_ANSWER_LOOKUP MA on MQ.QUESTION_IDENTIFIER = MA.QUESTION_IDENTIFIER "+
+        "and MQ.QUES_CODE_SYSTEM_CD = MA.QUES_CODE_SYSTEM_CD where MQ.QUESTION_IDENTIFIER='{0}' and MQ.QUESTION_DISPLAY_NAME='{1}'",quesIden, quesdispnm);
+
+            var myCommand = new SqlCommand(qry, _connection);
+            var adapter = new SqlDataAdapter(myCommand);
+            var dt = new DataTable();
+            adapter.Fill(dt);
+            return dt;                        
+        }
+
+
+        DataTable Get_MSG_Ans_Lookup(string quesIden,string anscode)
         {
-            string locId = "";
-            if (datasource == "Epi Info")
-            {
-                locId = "EpiInfo_MSG_"+configid+"_" + recId;
-            }
-            else
-            {
-                locId = "REDCap_MSG_" + configid + "_" + recId;
-            }
+            string qry = "";
+            qry = string.Format(
+              "  select * from  msg_answer_lookup where QUESTION_IDENTIFIER='{0}' and ANS_FROM_CODE= '{1}'", quesIden,anscode);
+
+            var myCommand = new SqlCommand(qry, _connection);
+            var adapter = new SqlDataAdapter(myCommand);
+            var dt = new DataTable();
+            adapter.Fill(dt);
+            return dt;
+        }
+
+
+
+        string Get_MSG_ANSWER_Qry1(string quesIden, string recId, string ansTxt, string datasource,string configid,string quescode,string quescodedesc,string anscode,string anscodedesc,string anscodedisptxt,string quesdispname)
+        {          
             string qry = "";
 
             qry = string.Format(
-              "select top 1 * from MSG_ANSWER where msg_event_id='{0}'",
-             locId);
+              "select top 1 * from MSG_ANSWER where msg_event_id='{0}' and question_identifier ='{1}' ",
+             locId, quesIden);
+
+            var clmBuilder = new StringBuilder();
+            var valBuilder = new StringBuilder();
+            if(!string.IsNullOrEmpty(anscode))
+            {
+                clmBuilder.Append("ANS_CODE_SYSTEM_CD ").Append(",");
+                valBuilder.Append("'").Append(anscode).Append("'").Append(","); 
+            }
+            if (!string.IsNullOrEmpty(anscodedesc))
+            {
+                clmBuilder.Append("ANS_CODE_SYSTEM_DESC_TXT ").Append(",");
+                valBuilder.Append("'").Append(anscodedesc).Append("'").Append(",");
+            }
+            if (!string.IsNullOrEmpty(anscodedisptxt))
+            {
+                clmBuilder.Append("ANS_DISPLAY_TXT ").Append(",");
+                valBuilder.Append("'").Append(anscodedisptxt).Append("'");
+            }
+
+            string clmNames = clmBuilder.ToString();
+            if (clmNames.EndsWith(","))
+            {
+                clmNames = clmNames.Remove(clmNames.Length - 1, 1);
+            }
+
+            string clmValues = valBuilder.ToString();
+            if (clmValues.EndsWith(","))
+           {
+                clmValues = clmValues.Remove(clmValues.Length - 1, 1);
+           }
+
             if (CheckforUpdateQuery(qry))
-            {               
-                qry = string.Format(
-                  "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}', ANSWER_TXT='{1}' where MSG_EVENT_ID='{2}' ",
-                   quesIden, ansTxt, locId);
-                
+            {
+                string query = string.Format(
+                 "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}', ANSWER_TXT='{1}' , QUES_CODE_SYSTEM_CD='{3}' , QUES_CODE_SYSTEM_DESC_TXT='{4}', " +
+                 "QUES_DISPLAY_TXT='{5}' ",
+                  quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname);
+                string wherequery = string.Format(" where MSG_EVENT_ID='{0}' and question_identifier ='{1}' ", locId, quesIden);
+                StringBuilder sb = new StringBuilder(); string querystring = "";
+                if (!string.IsNullOrEmpty(clmNames))
+                {
+                    string[] columnames = clmNames.Split(',');//msgid aythid idg
+                    string[] colvalues = clmValues.Split(',');//'1' '1234' 'rtyu
+                    for (int i = 0; i < columnames.Length; i++)
+                    {
+                        sb.Append(columnames[i]);
+                        sb.Append(" =");
+                        sb.Append(colvalues[i]);
+                        sb.Append(" , ");
+                    }
+                    querystring = sb.ToString();
+                    if (!string.IsNullOrEmpty(querystring) && querystring.EndsWith(", "))
+                    {
+                        querystring = querystring.Remove(querystring.Length - 2, 2);
+                        querystring = querystring.Insert(0, ",");
+                    }
+                }
+                qry = query + querystring + wherequery;
+
             }
             else
             {
-                qry = string.Format(
-                   "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT) values({0},'{1}','Case','{2}','{3}')",
-                   MsgID, locId, quesIden, ansTxt);
+                string qry1 = 
+                      "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
+                      "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT ";
+                if (!string.IsNullOrEmpty(clmNames))
+                {
+                    string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}',{7})",
+                         MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, clmValues);
+                    qry = qry1 + qry2;
+                }
+                else
+                {
+                    string qry2 = string.Format( clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}')",
+                        MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname);
+                    qry = qry1 + qry2;
+
+                }
             }
             return qry;
         }
@@ -1515,9 +1551,7 @@ namespace REDCapAPI
         bool CheckforUpdateQuery(string query)
         {
             try
-            {                
-               // if (OpenConnection())
-                //{                    
+            {                                                
                     Log.WriteToApplicationLog(query);
                     var myCommand = new SqlCommand(query, _connection);
                     var adapter = new SqlDataAdapter(myCommand);
@@ -1529,9 +1563,7 @@ namespace REDCapAPI
                         return true;
                     }
                     else
-                        return false;
-               // }
-               // return false;
+                        return false;               
             }
             catch (Exception e)
             {
@@ -1542,5 +1574,114 @@ namespace REDCapAPI
                // CloseConnection();
             }
         }
+
+
+        public bool SaveLookup(Settings.QuestioLookup lookup)
+        {
+            bool errorsOccured = false;
+            try
+            {
+                if (OpenConnection())
+                {
+                    string qry = "";
+                    try
+                    {                        
+                            var com = new SqlCommand();
+                            com.Connection = _connection;
+                            com.CommandType = CommandType.Text;                          
+                                qry = string.Format(
+                                     "insert into MSG_QUESTION_LOOKUP(DOC_TYPE_CD,DOC_TYPE_VERSION_TXT, QUES_CODE_SYSTEM_CD, QUES_CODE_SYSTEM_DESC_TXT, DATA_TYPE, QUESTION_IDENTIFIER,QUESTION_DISPLAY_NAME,SENDING_SYSTEM_CD) " +
+                                     "values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}')",
+                                     lookup.DocTypeId, lookup.DocTypeVersionTxt, lookup.QuesCodeSysCD, lookup.QuesCodeSysDescTxt,
+                                     lookup.Data_Type,
+                                     lookup.QuesIdentifier, lookup.QuesDisplayName, lookup.SendingSysCD);                         
+                            com.CommandText = qry;
+                            com.ExecuteNonQuery();     
+                        if(lookup.Data_Type=="CODED")
+                        {
+                            qry = string.Format(
+                                    "insert into MSG_ANSWER_LOOKUP(ANS_FROM_CODE,ANS_FROM_CODE_SYSTEM_CD, ANS_FROM_CODE_SYSTEM_DESC_TXT, ANS_FROM_DISPLAY_NM,"+
+                                    " ANS_TO_CODE, ANS_TO_CODE_SYSTEM_CD,ANS_TO_CODE_SYSTEM_DESC_TXT,ANS_TO_DISPLAY_NM," +
+                                    " CODE_TRANSLATION_REQUIRED,DOC_TYPE_CD,DOC_TYPE_VERSION_TXT,QUES_CODE_SYSTEM_CD,QUESTION_IDENTIFIER,SENDING_SYSTEM_CD,INVESTIGATION_FORM_CD )" +
+                                    "values('{0}','{1}','{2}','{3}','{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')",
+                                    lookup.AnsFromCode, lookup.AnsFromCodeSysCD, lookup.AnsFromCodeSysDecsTxt, lookup.AnsFromDisNM,
+                                    lookup.CodeTransReq,lookup.DocTypeId, lookup.DocTypeVersionTxt, lookup.QuesCodeSysCD,lookup.QuesIdentifier,lookup.SendingSysCD,lookup.InvestigationFormCd);
+                            com.CommandText = qry;
+                            com.ExecuteNonQuery();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.WriteToErrorLog("Error in qry: " + qry);
+                        Log.WriteToErrorLog(ex);
+                        errorsOccured = true;
+                    }
+                }
+
+                if (!errorsOccured)
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.WriteToErrorLog(e);
+            }
+            finally
+            {
+                //CloseConnection();
+            }
+            return false;
+        }
+
+
+        public bool SaveAnslookup(Settings.QuestioLookup lookup)
+        {
+            bool errorsOccured = false;
+            try
+            {
+                if (OpenConnection())
+                {
+                    string qry = "";
+                    try
+                    {
+                        var com = new SqlCommand();
+                        com.Connection = _connection;
+                        com.CommandType = CommandType.Text;
+                       
+                            qry = string.Format(
+                                    "insert into MSG_ANSWER_LOOKUP(ANS_FROM_CODE,ANS_FROM_CODE_SYSTEM_CD, ANS_FROM_CODE_SYSTEM_DESC_TXT, ANS_FROM_DISPLAY_NM," +
+                                    " ANS_TO_CODE, ANS_TO_CODE_SYSTEM_CD,ANS_TO_CODE_SYSTEM_DESC_TXT,ANS_TO_DISPLAY_NM," +
+                                    " CODE_TRANSLATION_REQUIRED,DOC_TYPE_CD,DOC_TYPE_VERSION_TXT,QUES_CODE_SYSTEM_CD,QUESTION_IDENTIFIER,SENDING_SYSTEM_CD,INVESTIGATION_FORM_CD )" +
+                                    "values('{0}','{1}','{2}','{3}','{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')",
+                                    lookup.AnsFromCode, lookup.AnsFromCodeSysCD, lookup.AnsFromCodeSysDecsTxt, lookup.AnsFromDisNM,
+                                    lookup.CodeTransReq, lookup.DocTypeId, lookup.DocTypeVersionTxt, lookup.QuesCodeSysCD, lookup.QuesIdentifier, lookup.SendingSysCD, lookup.InvestigationFormCd);
+                            com.CommandText = qry;
+                            com.ExecuteNonQuery();                      
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.WriteToErrorLog("Error in qry: " + qry);
+                        Log.WriteToErrorLog(ex);
+                        errorsOccured = true;
+                    }
+                }
+
+                if (!errorsOccured)
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.WriteToErrorLog(e);
+            }
+            finally
+            {
+              //  CloseConnection();
+            }
+            return false;
+        }
+
     }
 }

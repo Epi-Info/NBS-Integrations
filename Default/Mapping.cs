@@ -38,6 +38,7 @@ namespace Default
         private void FillMsgQuestions()
         {
             DataTable dt = _objSql.GetMsgQsLookUps();
+            nbsElemList.Clear();
             if (dt != null && dt.Rows.Count > 0)
             {
                 foreach (DataRow row in dt.Rows)
@@ -590,6 +591,7 @@ namespace Default
                 {
                     lbNbsDe.Items.Add(nbsElem);
                 }
+                lbNbsDe.Items.Add("Create NBS Data Element..");
             }
         }
 
@@ -632,6 +634,17 @@ namespace Default
                 return;
             }
           //  UpdateStatus("No records are selected.");
+        }
+
+        private void lbNbsDe_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(lbNbsDe.SelectedItem.ToString()== "Create NBS Data Element..")
+            {
+                var objSettings = new CreateLookup();
+                objSettings.Datasource = _datasource;
+                objSettings.ShowDialog(this);
+                FillMsgQuestions();
+            }
         }
     }
 }
