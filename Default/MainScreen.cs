@@ -66,6 +66,7 @@ namespace Default
                         string excludeConditions = Convert.ToString(row["exclude_conditions"]);
                         string datasource = Convert.ToString(row["datasource"]);
                         string lastimported= Convert.ToString(row["LastImported"]);
+                        string configid = Convert.ToString(row["Config_id"]);
 
                         _siteOid = Convert.ToString(row["site_oid"]);
                         if (datasource == "Epi Info")
@@ -82,7 +83,15 @@ namespace Default
                                     DataTable newtbl = datatable.Clone();
                                     foreach (DataRow row1 in rows)
                                     {
-                                        newtbl.ImportRow(row1);
+                                        if (datatable.Columns.Contains("PAT_NAME_FIRST_TXT") && datatable.Columns.Contains("PAT_NAME_LAST_TXT") && datatable.Columns.Contains("INV_CONDITION_CD"))
+                                        {
+                                            if (!string.IsNullOrEmpty(row1["PAT_NAME_FIRST_TXT"].ToString()) && !string.IsNullOrEmpty(row1["PAT_NAME_LAST_TXT"].ToString()) && !string.IsNullOrEmpty(row1["INV_CONDITION_CD"].ToString()))
+                                                newtbl.ImportRow(row1);
+                                        }
+                                        else
+                                        {
+                                            newtbl.ImportRow(row1);
+                                        }
                                     }                                 
                                     dgvOrders.DataSource = newtbl;                                    
                                      if (!string.IsNullOrEmpty(lastimported))
@@ -130,7 +139,16 @@ namespace Default
                                     DataTable newtbl = apitbl.Clone();
                                     foreach (DataRow row1 in rows)
                                     {
-                                        newtbl.ImportRow(row1);
+
+                                        if (apitbl.Columns.Contains("patient_fname") && apitbl.Columns.Contains("patient_lname") && apitbl.Columns.Contains("condition"))
+                                        {
+                                            if (!string.IsNullOrEmpty(row1["patient_fname"].ToString()) && !string.IsNullOrEmpty(row1["patient_lname"].ToString()) && !string.IsNullOrEmpty(row1["condition"].ToString()))
+                                                newtbl.ImportRow(row1);
+                                        }
+                                        else
+                                        {
+                                            newtbl.ImportRow(row1);
+                                        }
                                     }
                                     newtbl.DefaultView.Sort = "record_id asc";
                                     dgvOrders.DataSource = newtbl;
@@ -140,6 +158,16 @@ namespace Default
                             {
                                 dgvOrders.DataSource = apitbl;
                             }
+                                string locId = "";                                                        
+                                foreach (DataGridViewRow r in dgvOrders.Rows)
+                                {
+                                    string recId = Convert.ToString(r.Cells["record_id"].Value);
+                                    locId = "REDCap_" + configid + "_" + recId;                                  
+                                    if (_objSql.Get_MSG_CONTAINER_Qry1(locId))
+                                    {
+                                        r.DefaultCellStyle.ForeColor = Color.Gray;
+                                    }
+                                }                         
                         }
                         InsertCheckBoxColumn();
                         UpdateStatus("Completed.");
@@ -284,11 +312,11 @@ namespace Default
                                             string formname = Convert.ToString(row["form_nm"]);                                          
                                             string datasource = Convert.ToString(row["datasource"]);
                                             string id = Convert.ToString(row["Config_id"]);                                         
-                                            if (datasource == "Epi Info")
-                                            {
+                                           // if (datasource == "Epi Info")
+                                            //{
                                                 _objSql.UpdateConfig(id);
                                                 dgrow.DefaultCellStyle.ForeColor = Color.Gray;                                                                                                                                          
-                                            }
+                                            //}
                                         }
                                     }
                                 }

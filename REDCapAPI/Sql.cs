@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml;
 using LogManager;
 using System.Data.SqlTypes;
+using System.Resources;
 
 namespace REDCapAPI
 {
@@ -23,6 +24,10 @@ namespace REDCapAPI
         private static SqlCredentials _credentials;
         private string MsgID = "";
         private string locId = "";
+        private string prid = "";
+        private static string migrationstatus = "";
+        private static string partcipation_cd_def = "";
+        private static string msg_iden_def = "";
 
         public Sql(string appPath, string connString)
         {
@@ -69,6 +74,23 @@ namespace REDCapAPI
                 if (selectedNode != null)
                     credentials.Server = selectedNode.InnerText;
 
+                selectedNode = xmlDoc.SelectSingleNode("/Settings/DATA_MIGRATION_STATUS");
+                if (selectedNode != null)
+                    migrationstatus = selectedNode.InnerText;
+                else
+                    migrationstatus = "-1";
+
+                selectedNode = xmlDoc.SelectSingleNode("/Settings/PARTICIPATION_CD");
+                if (selectedNode != null)
+                    partcipation_cd_def = selectedNode.InnerText;
+                else
+                    partcipation_cd_def = "SubjOfPHC";
+
+                selectedNode = xmlDoc.SelectSingleNode("/Settings/QUESTION_IDENTIFIER");
+                if (selectedNode != null)
+                    msg_iden_def = selectedNode.InnerText;
+                else
+                    msg_iden_def = "INV180";
             }
             catch (Exception exception)
             {
@@ -76,7 +98,7 @@ namespace REDCapAPI
             }
             return credentials;
         }
-
+        
         public bool IsOrderNumberExist(string orderno)
         {
             try
@@ -790,9 +812,9 @@ namespace REDCapAPI
                 com.CommandType = CommandType.Text;
                 qry =
                     string.Format(
-                        "insert into [MSG_CONTAINER](MSG_CONTAINER_UID,DOCUMENT_ID,DOC_TYPE_CD,EFFECTIVE_TIME,RECORD_STATUS_CD,RECORD_STATUS_TIME,RECEIVING_SYSTEM ,DATA_MIGRATION_STATUS,ONGOING_CASE ) values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')",
+                        "insert into [MSG_CONTAINER](MSG_CONTAINER_UID,DOCUMENT_ID,DOC_TYPE_CD,EFFECTIVE_TIME,RECORD_STATUS_CD,RECORD_STATUS_TIME,RECEIVING_SYSTEM ,DATA_MIGRATION_STATUS,ONGOING_CASE ,MSG_LOCAL_ID) values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')",
                         msgId, map.DocumentId, map.DocTypeCd, map.EffectiveTime, map.RecordStatusCd,
-                        map.RecordStatusTime,map.DataSource,-1,map.Ongoing_case);
+                        map.RecordStatusTime,map.DataSource, migrationstatus, map.Ongoing_case,locId);
                 com.CommandText = qry;
                 com.ExecuteNonQuery();
             }
@@ -843,7 +865,7 @@ namespace REDCapAPI
             bool errorsOccured = false;
             try
             {
-                MsgID = null;locId = null;
+                MsgID = null;locId = null;prid = null;
                 if (OpenConnection())
                 {
                     string qry = "";
@@ -1356,6 +1378,7 @@ namespace REDCapAPI
             {
                 prvId = "REDCap_PRV_" + configid + "_" + recId;
             }
+            prid = prvId;
 
             qry = string.Format(
               "select top 1 * from MSG_PROVIDER where prv_local_id='{0}'",
@@ -1372,7 +1395,103 @@ namespace REDCapAPI
                 "insert into {0}(MSG_CONTAINER_UID,PRV_LOCAL_ID,PRV_AUTHOR_ID,{1}) values('{2}','{3}','{4}',{5})",
                 tableName, clmNames, MsgID, prvId, authorId, clmValues);
             }
+            UpdateMSGAnswerTextforProv();
             return qry;
+        }
+
+
+       public bool Get_MSG_CONTAINER_Qry1( string locId)
+        {
+
+            string qry = "" ;          
+            qry = string.Format(
+              "select top 1 * from MSG_CONTAINER where MSG_LOCAL_ID ='{0}'",
+              locId);
+            if (CheckforUpdateQuery(qry))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }           
+        }
+
+        bool UpdateMSGAnswerTextforProv()
+        {
+            string qry = ""; bool errorsOccured = false;
+            string quesiden = "";
+
+            qry = string.Format(
+              "select  * from MSG_ANSWER where MSG_Container_UID='{0}' ",
+             MsgID);
+            DataTable dt = new DataTable();
+            if (GetQuesAnsforProvider(qry, out dt))
+            {              
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        quesiden = dr["QUESTION_IDENTIFIER"].ToString();
+                        string part_id = "";
+                        part_id = GetParticipationType(quesiden);
+                        string query = string.Format(
+                        "update  MSG_ANSWER set   ANSWER_TXT='{0}',PART_TYPE_CD = '{1}' ",
+                            prid, part_id);
+                        string wherequery = string.Format(" where MSG_Container_UID='{0}' and QUESTION_IDENTIFIER= '{1}'  ", MsgID, quesiden);
+
+                         qry = query + wherequery;
+                        if (OpenConnection())
+                        {
+                            try
+                            {
+                                var com = new SqlCommand();
+                                com.Connection = _connection;
+                                com.CommandType = CommandType.Text;
+                                com.CommandText = qry;
+                                com.ExecuteNonQuery();
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.WriteToErrorLog("Error in qry: " + qry);
+                                Log.WriteToErrorLog(ex);
+                                errorsOccured = true;
+                            }                          
+                        }
+                    }                
+            }
+            else
+            {
+                string quescode = "2.16.840.1.114222.4.5.232";
+                string quescodedesc = "NEDSS Base System";
+                string quesdispname = "Investigator System UID";
+                string qry1 =
+                    "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
+                    "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT,PART_TYPE_CD ";
+                string qry2 = string.Format( " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}')",
+                        MsgID, locId, msg_iden_def, prid, quescode, quescodedesc, quesdispname, partcipation_cd_def);
+                qry = qry1 + qry2;
+                if (OpenConnection())
+                {
+                    try
+                    {
+                        var com = new SqlCommand();
+                        com.Connection = _connection;
+                        com.CommandType = CommandType.Text;
+                        com.CommandText = qry;
+                        com.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.WriteToErrorLog("Error in qry: " + qry);
+                        Log.WriteToErrorLog(ex);
+                        errorsOccured = true;
+                    }
+                }
+            }
+            if (!errorsOccured)
+            {
+                return true;
+            }
+            return false;
         }
 
         string Get_MSG_TREATMENT_Qry1(string tableName, string clmNames, string recId, string authorId, string clmValues, string datasource,string configid)
@@ -1465,8 +1584,7 @@ namespace REDCapAPI
 
             qry = string.Format(
               "select top 1 * from MSG_ANSWER where msg_event_id='{0}' and question_identifier ='{1}' ",
-             locId, quesIden);
-
+             locId, quesIden);         
             var clmBuilder = new StringBuilder();
             var valBuilder = new StringBuilder();
             if(!string.IsNullOrEmpty(anscode))
@@ -1496,13 +1614,16 @@ namespace REDCapAPI
            {
                 clmValues = clmValues.Remove(clmValues.Length - 1, 1);
            }
-
+            if(!string.IsNullOrEmpty(prid))
+            {
+                ansTxt = prid;
+            }
             if (CheckforUpdateQuery(qry))
             {
                 string query = string.Format(
                  "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}', ANSWER_TXT='{1}' , QUES_CODE_SYSTEM_CD='{3}' , QUES_CODE_SYSTEM_DESC_TXT='{4}', " +
-                 "QUES_DISPLAY_TXT='{5}' ",
-                  quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname);
+                 "QUES_DISPLAY_TXT='{5}' ,PART_TYPE_CD='{6}'",
+                  quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname, partcipation_cd_def);
                 string wherequery = string.Format(" where MSG_EVENT_ID='{0}' and question_identifier ='{1}' ", locId, quesIden);
                 StringBuilder sb = new StringBuilder(); string querystring = "";
                 if (!string.IsNullOrEmpty(clmNames))
@@ -1530,17 +1651,17 @@ namespace REDCapAPI
             {
                 string qry1 = 
                       "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
-                      "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT ";
+                      "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT,PART_TYPE_CD ";
                 if (!string.IsNullOrEmpty(clmNames))
                 {
-                    string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}',{7})",
-                         MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, clmValues);
+                    string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}',{8})",
+                         MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, partcipation_cd_def, clmValues);
                     qry = qry1 + qry2;
                 }
                 else
                 {
-                    string qry2 = string.Format( clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}')",
-                        MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname);
+                    string qry2 = string.Format( clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}')",
+                        MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, partcipation_cd_def);
                     qry = qry1 + qry2;
 
                 }
@@ -1683,5 +1804,42 @@ namespace REDCapAPI
             return false;
         }
 
+        public string GetParticipationType(string quesiden)
+        {
+            string participationtype = "";
+            participationtype = REDCapAPI.Partcipation.ResourceManager.GetString(quesiden);
+            if (string.IsNullOrEmpty(participationtype))
+                participationtype = partcipation_cd_def;
+            return participationtype;
+        }
+
+        bool GetQuesAnsforProvider(string query,out DataTable datatable)
+        {
+            try
+            {
+                Log.WriteToApplicationLog(query);
+                var myCommand = new SqlCommand(query, _connection);
+                var adapter = new SqlDataAdapter(myCommand);
+                datatable = new DataTable(); ;
+                adapter.Fill(datatable);
+                if (datatable.Rows.Count > 0)
+                {
+                    MsgID = datatable.Rows[0]["msg_container_uid"].ToString();                  
+                    return true;
+                }
+                else
+                    return false;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+            finally
+            {
+                // CloseConnection();
+            }
+        }
+
     }
+    
 }
