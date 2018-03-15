@@ -842,8 +842,8 @@ namespace REDCapAPI
                 com.CommandType = CommandType.Text;
                 qry =
                     string.Format(
-                        "update [MSG_CONTAINER]  set ONGOING_CASE='{0}',EFFECTIVE_TIME='{2}',RECORD_STATUS_TIME='{3}' where MSG_CONTAINER_UID='{1}'",
-                       map.Ongoing_case, msgId,map.EffectiveTime,map.RecordStatusTime);
+                        "update [MSG_CONTAINER]  set ONGOING_CASE='{0}',EFFECTIVE_TIME='{2}',RECORD_STATUS_TIME='{3}',DATA_MIGRATION_STATUS='{4}'  where MSG_CONTAINER_UID='{1}'",
+                       map.Ongoing_case, msgId,map.EffectiveTime,map.RecordStatusTime, migrationstatus);
                 com.CommandText = qry;
                 com.ExecuteNonQuery();
             }
