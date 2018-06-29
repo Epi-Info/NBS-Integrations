@@ -1188,7 +1188,8 @@ namespace REDCapAPI
                                     break;
                             }
                                                  
-                        }                        
+                        }
+                       
                     }
                     catch (Exception ex)
                     {
@@ -1427,18 +1428,20 @@ namespace REDCapAPI
              MsgID);
             DataTable dt = new DataTable();
             if (GetQuesAnsforProvider(qry, out dt))
-            {              
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        quesiden = dr["QUESTION_IDENTIFIER"].ToString();
-                        string part_id = "";
-                        part_id = GetParticipationType(quesiden);
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    quesiden = dr["QUESTION_IDENTIFIER"].ToString();
+                    string part_id = "";
+                    part_id = GetParticipationType(quesiden);
+                   if(quesiden == msg_iden_def || part_id != partcipation_cd_def)
+                    { 
                         string query = string.Format(
                         "update  MSG_ANSWER set   ANSWER_TXT='{0}',PART_TYPE_CD = '{1}' ",
                             prid, part_id);
                         string wherequery = string.Format(" where MSG_Container_UID='{0}' and QUESTION_IDENTIFIER= '{1}'  ", MsgID, quesiden);
 
-                         qry = query + wherequery;
+                        qry = query + wherequery;
                         if (OpenConnection())
                         {
                             try
@@ -1454,8 +1457,9 @@ namespace REDCapAPI
                                 Log.WriteToErrorLog("Error in qry: " + qry);
                                 Log.WriteToErrorLog(ex);
                                 errorsOccured = true;
-                            }                          
+                            }
                         }
+               }
                     }                
             }
             else
@@ -1616,14 +1620,18 @@ namespace REDCapAPI
            }
             if(!string.IsNullOrEmpty(prid))
             {
-                ansTxt = prid;
+               string  part_id = GetParticipationType(quesIden);
+                if (quesIden == msg_iden_def || part_id != partcipation_cd_def)
+                {
+                    ansTxt = prid;
+                }
             }
             if (CheckforUpdateQuery(qry))
             {
                 string query = string.Format(
                  "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}', ANSWER_TXT='{1}' , QUES_CODE_SYSTEM_CD='{3}' , QUES_CODE_SYSTEM_DESC_TXT='{4}', " +
-                 "QUES_DISPLAY_TXT='{5}' ,PART_TYPE_CD='{6}'",
-                  quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname, partcipation_cd_def);
+                 "QUES_DISPLAY_TXT='{5}' ",
+                  quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname);
                 string wherequery = string.Format(" where MSG_EVENT_ID='{0}' and question_identifier ='{1}' ", locId, quesIden);
                 StringBuilder sb = new StringBuilder(); string querystring = "";
                 if (!string.IsNullOrEmpty(clmNames))
@@ -1651,17 +1659,17 @@ namespace REDCapAPI
             {
                 string qry1 = 
                       "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
-                      "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT,PART_TYPE_CD ";
+                      "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT";
                 if (!string.IsNullOrEmpty(clmNames))
                 {
-                    string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}',{8})",
-                         MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, partcipation_cd_def, clmValues);
+                    string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}',{7})",
+                         MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname,  clmValues);
                     qry = qry1 + qry2;
                 }
                 else
                 {
-                    string qry2 = string.Format( clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}')",
-                        MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, partcipation_cd_def);
+                    string qry2 = string.Format( clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}')",
+                        MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname);
                     qry = qry1 + qry2;
 
                 }

@@ -116,10 +116,13 @@ namespace Default
                                     DateTime importdt = Convert.ToDateTime(lastimported);
                                     foreach (DataGridViewRow r in dgvOrders.Rows)
                                     {
-                                        DateTime lastsave = Convert.ToDateTime(r.Cells["LastSaveTime"].Value.ToString());
-                                        if (lastsave <= importdt)
+                                        if (!string.IsNullOrEmpty(r.Cells["LastSaveTime"].Value.ToString()))
                                         {
-                                            r.DefaultCellStyle.ForeColor = Color.Gray;
+                                            DateTime lastsave = Convert.ToDateTime(r.Cells["LastSaveTime"].Value.ToString());
+                                            if (lastsave <= importdt)
+                                            {
+                                                r.DefaultCellStyle.ForeColor = Color.Gray;
+                                            }
                                         }
                                     }
                                 }
@@ -311,12 +314,9 @@ namespace Default
                                         {                                            
                                             string formname = Convert.ToString(row["form_nm"]);                                          
                                             string datasource = Convert.ToString(row["datasource"]);
-                                            string id = Convert.ToString(row["Config_id"]);                                         
-                                           // if (datasource == "Epi Info")
-                                            //{
+                                            string id = Convert.ToString(row["Config_id"]);                                                                                  
                                                 _objSql.UpdateConfig(id);
-                                                dgrow.DefaultCellStyle.ForeColor = Color.Gray;                                                                                                                                          
-                                            //}
+                                                dgrow.DefaultCellStyle.ForeColor = Color.Gray;                                                                                                                                                                                     
                                         }
                                     }
                                 }
