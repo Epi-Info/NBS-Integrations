@@ -16,6 +16,13 @@ namespace Default
             var cred = objSettings.ReadApiSettings();
             CommonData.Credentials = cred;
             _objSql = new Sql(Application.StartupPath, CommonData.Credentials.ConnectionString);
+            if (cred.HideNBSConnection != null)
+            {
+                if (cred.HideNBSConnection.ToLower() == "true")
+                {
+                    btnTestConnection.Enabled = false;
+                }
+            }
         }
 
         public class ItemDisplay<TValue>

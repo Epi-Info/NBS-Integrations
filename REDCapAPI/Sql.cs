@@ -886,7 +886,7 @@ namespace REDCapAPI
                             foreach (var m in maps)
                             {
                                 clmBuilder.Append(m.ColumnName).Append(",");
-                                valBuilder.Append("'").Append(m.ApiValue).Append("'").Append(",");
+                                valBuilder.Append("'").Append(m.ApiValue.Replace("'","''")).Append("'").Append(",");
                                 datasource = m.DataSource;
                                 configid = m.ConfigId;                                
                             }
@@ -1118,26 +1118,30 @@ namespace REDCapAPI
                                                     questionIdentifier = map.NbsFieldName.Split('-')[0].Trim();
                                                     questiondisplayname= map.NbsFieldName.Split('-')[1].Trim();
                                                 }
-
-                                                DataTable dattable = Get_MSG_Lookups(questionIdentifier, questiondisplayname);
+                                                DataTable dattable = Get_QUES_Lookup(questionIdentifier);                                              
                                                 string quescode=null, quescodedesc=null, anscode=null, anscodedesc=null, ansdisptxt = null;
                                                 if (dattable.Rows.Count > 0)
                                                 {                                                    
 
                                                     quescode = dattable.Rows[0]["QUES_CODE_SYSTEM_CD"].ToString();
                                                     quescodedesc = dattable.Rows[0]["QUES_CODE_SYSTEM_DESC_TXT"].ToString();
-                                                    if (!string.IsNullOrEmpty(dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString()))
-                                                        anscode = dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString();
-                                                    if (!string.IsNullOrEmpty(dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString()))
-                                                        anscodedesc = dattable.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString();
-                                                    if(!string.IsNullOrEmpty(dattable.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString()))
-                                                    ansdisptxt = dattable.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString();
+                                                    
 
                                                     if (dattable.Rows[0]["DATA_TYPE"].ToString() == "CODED")
                                                     {
                                                         DataTable dt = Get_MSG_Ans_Lookup(questionIdentifier, map.ApiValue);
                                                         if (dt.Rows.Count == 0)
                                                         {
+                                                            DataTable dattable1 = Get_MSG_Lookups(questionIdentifier);
+                                                            if (dattable1.Rows.Count > 0)
+                                                            {
+                                                                if (!string.IsNullOrEmpty(dattable1.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString()))
+                                                                    anscode = dattable1.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString();
+                                                                if (!string.IsNullOrEmpty(dattable1.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString()))
+                                                                    anscodedesc = dattable1.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString();
+                                                                if (!string.IsNullOrEmpty(dattable1.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString()))
+                                                                    ansdisptxt = dattable1.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString();
+                                                            }
                                                             var lookup = new Settings.QuestioLookup
                                                             {
 
@@ -1160,10 +1164,20 @@ namespace REDCapAPI
 
                                                             SaveAnslookup(lookup);
                                                         }
+                                                        else
+                                                        {
+                                                            if (!string.IsNullOrEmpty(dt.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString()))
+                                                                anscode = dt.Rows[0]["ANS_FROM_CODE_SYSTEM_CD"].ToString();
+                                                            if (!string.IsNullOrEmpty(dt.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString()))
+                                                                anscodedesc = dt.Rows[0]["ANS_FROM_CODE_SYSTEM_DESC_TXT"].ToString();
+                                                            if (!string.IsNullOrEmpty(dt.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString()))
+                                                                ansdisptxt = dt.Rows[0]["ANS_FROM_DISPLAY_NM"].ToString();
+                                                        }                                                        
                                                     }
                                                 }
+                                               
 
-                                                qry = Get_MSG_ANSWER_Qry1(questionIdentifier, recId, map.ApiValue, map.DataSource,configid,quescode,quescodedesc,anscode,anscodedesc,ansdisptxt, questiondisplayname);
+                                                qry = Get_MSG_ANSWER_Qry1(questionIdentifier, recId, map.ApiValue, map.ColumnName, map.DataSource,configid,quescode,quescodedesc,anscode,anscodedesc,ansdisptxt, questiondisplayname);
                                                 query = qry;
                                                 if (qry.StartsWith("insert") && string.IsNullOrEmpty(MsgID))
                                                 {
@@ -1176,7 +1190,8 @@ namespace REDCapAPI
                                                     UpdateMsgContainerId(mapList.First(), MsgID);
                                                 }
                                                 com.CommandText = query;
-                                                com.ExecuteNonQuery();                                               
+                                                com.ExecuteNonQuery();
+                                                UpdateMSGAnswerTextforProv();
                                             }                                          
                                         }
                                         catch (Exception ex)
@@ -1435,10 +1450,13 @@ namespace REDCapAPI
                     string part_id = "";
                     part_id = GetParticipationType(quesiden);
                    if(quesiden == msg_iden_def || part_id != partcipation_cd_def)
-                    { 
+                    {
+                        //string query = string.Format(
+                        //"update  MSG_ANSWER set   ANSWER_TXT='{0}',PART_TYPE_CD = '{1}' ",
+                        //    prid, part_id);
                         string query = string.Format(
-                        "update  MSG_ANSWER set   ANSWER_TXT='{0}',PART_TYPE_CD = '{1}' ",
-                            prid, part_id);
+                      "update  MSG_ANSWER set   ANSWER_TXT='{0}' ",
+                          prid);
                         string wherequery = string.Format(" where MSG_Container_UID='{0}' and QUESTION_IDENTIFIER= '{1}'  ", MsgID, quesiden);
 
                         qry = query + wherequery;
@@ -1462,16 +1480,22 @@ namespace REDCapAPI
                }
                     }                
             }
-            else
+         /*   else
             {
                 string quescode = "2.16.840.1.114222.4.5.232";
                 string quescodedesc = "NEDSS Base System";
                 string quesdispname = "Investigator System UID";
+                //string qry1 =
+                //    "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
+                //    "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT,PART_TYPE_CD ";
+                //string qry2 = string.Format( " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}')",
+                //        MsgID, locId, msg_iden_def, prid, quescode, quescodedesc, quesdispname, partcipation_cd_def);
+
                 string qry1 =
-                    "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
-                    "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT,PART_TYPE_CD ";
-                string qry2 = string.Format( " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}','{7}')",
-                        MsgID, locId, msg_iden_def, prid, quescode, quescodedesc, quesdispname, partcipation_cd_def);
+                  "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
+                  "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT ";
+                string qry2 = string.Format(" ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}')",
+                        MsgID, locId, msg_iden_def, prid, quescode, quescodedesc, quesdispname);
                 qry = qry1 + qry2;
                 if (OpenConnection())
                 {
@@ -1490,7 +1514,7 @@ namespace REDCapAPI
                         errorsOccured = true;
                     }
                 }
-            }
+            }*/
             if (!errorsOccured)
             {
                 return true;
@@ -1536,11 +1560,11 @@ namespace REDCapAPI
            string[] columnames= clmNames.Split(',');//msgid aythid idg
            string[] colvalues= clmValues.Split(',');//'1' '1234' 'rtyu
             for(int i=0;i<columnames.Length; i++)
-            {                
-                    sb.Append(columnames[i]);
-                    sb.Append(" =");
-                    sb.Append(colvalues[i]);
-                    sb.Append(" , ");                
+            {                     
+                sb.Append(columnames[i]);              
+                sb.Append(" =");               
+                sb.Append(colvalues[i]);                
+                sb.Append(" , ");                
             }
             string querystring = sb.ToString();
             if (querystring.EndsWith(", "))
@@ -1550,14 +1574,29 @@ namespace REDCapAPI
             return querystring;
         }
 
-        DataTable Get_MSG_Lookups(string quesIden, string quesdispnm)
+        DataTable Get_QUES_Lookup(string quesIden)
+        {
+            string qry = "";
+            qry = string.Format(
+              "  select top 1 * from MSG_QUESTION_LOOKUP MQ " +      
+        "  where MQ.QUESTION_IDENTIFIER='{0}'", quesIden);
+
+            var myCommand = new SqlCommand(qry, _connection);
+            var adapter = new SqlDataAdapter(myCommand);
+            var dt = new DataTable();
+            adapter.Fill(dt);
+            return dt;
+        }
+
+        DataTable Get_MSG_Lookups(string quesIden)
         {            
             string qry = "";
             qry = string.Format(
               "  select top 1 MQ.QUES_CODE_SYSTEM_CD,QUES_CODE_SYSTEM_DESC_TXT,"+
       " [ANS_FROM_CODE_SYSTEM_CD],[ANS_FROM_CODE_SYSTEM_DESC_TXT] ,[ANS_FROM_DISPLAY_NM], [DATA_TYPE] from MSG_QUESTION_LOOKUP MQ " +      
-        "left outer join MSG_ANSWER_LOOKUP MA on MQ.QUESTION_IDENTIFIER = MA.QUESTION_IDENTIFIER "+
-        "and MQ.QUES_CODE_SYSTEM_CD = MA.QUES_CODE_SYSTEM_CD where MQ.QUESTION_IDENTIFIER='{0}' and MQ.QUESTION_DISPLAY_NAME='{1}'",quesIden, quesdispnm);
+        "inner join MSG_ANSWER_LOOKUP MA on MQ.QUESTION_IDENTIFIER = MA.QUESTION_IDENTIFIER "+
+        "and MQ.QUES_CODE_SYSTEM_CD = MA.QUES_CODE_SYSTEM_CD where MQ.QUESTION_IDENTIFIER='{0}' and [ANS_FROM_CODE_SYSTEM_CD] <>'' " +
+        "and [ANS_FROM_CODE_SYSTEM_DESC_TXT] <>'' and [ANS_FROM_DISPLAY_NM] <>'' ", quesIden);
 
             var myCommand = new SqlCommand(qry, _connection);
             var adapter = new SqlDataAdapter(myCommand);
@@ -1582,7 +1621,7 @@ namespace REDCapAPI
 
 
 
-        string Get_MSG_ANSWER_Qry1(string quesIden, string recId, string ansTxt, string datasource,string configid,string quescode,string quescodedesc,string anscode,string anscodedesc,string anscodedisptxt,string quesdispname)
+        string Get_MSG_ANSWER_Qry1(string quesIden, string recId, string clmvals, string clmnames, string datasource,string configid,string quescode,string quescodedesc,string anscode,string anscodedesc,string anscodedisptxt,string quesdispname)
         {          
             string qry = "";
 
@@ -1591,10 +1630,12 @@ namespace REDCapAPI
              locId, quesIden);         
             var clmBuilder = new StringBuilder();
             var valBuilder = new StringBuilder();
-            if(!string.IsNullOrEmpty(anscode))
+            clmBuilder.Append(clmnames);
+            valBuilder.Append("'"+clmvals.Replace("'","''")+"' ");
+            if (!string.IsNullOrEmpty(anscode))
             {
-                clmBuilder.Append("ANS_CODE_SYSTEM_CD ").Append(",");
-                valBuilder.Append("'").Append(anscode).Append("'").Append(","); 
+                clmBuilder.Append(", ANS_CODE_SYSTEM_CD ").Append(",");
+                valBuilder.Append(",'").Append(anscode).Append("'").Append(","); 
             }
             if (!string.IsNullOrEmpty(anscodedesc))
             {
@@ -1618,61 +1659,97 @@ namespace REDCapAPI
            {
                 clmValues = clmValues.Remove(clmValues.Length - 1, 1);
            }
+            string partcd = "";
             if(!string.IsNullOrEmpty(prid))
             {
                string  part_id = GetParticipationType(quesIden);
                 if (quesIden == msg_iden_def || part_id != partcipation_cd_def)
                 {
-                    ansTxt = prid;
+                   // ansTxt = prid;
+                  //  partcd = part_id;
                 }
             }
+
             if (CheckforUpdateQuery(qry))
             {
-                string query = string.Format(
-                 "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}', ANSWER_TXT='{1}' , QUES_CODE_SYSTEM_CD='{3}' , QUES_CODE_SYSTEM_DESC_TXT='{4}', " +
-                 "QUES_DISPLAY_TXT='{5}' ",
-                  quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname);
+                string query = null;string updateclmValues = "";
+              //  updateclmValues="'"+ clmValues+"'";
+                query = GetUpdateQuery("MSG_ANSWER", clmNames.ToString(), locId, clmValues.ToString());
+              /*  if (string.IsNullOrEmpty(partcd))
+                {
+                    query = string.Format(
+                      "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}' , QUES_CODE_SYSTEM_CD='{3}' , QUES_CODE_SYSTEM_DESC_TXT='{4}', " +
+                      "QUES_DISPLAY_TXT='{5}' ",
+                       quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname);
+                }
+                else
+                {
+                    query = string.Format(
+                     "update  MSG_ANSWER set  QUESTION_IDENTIFIER='{0}', ANSWER_TXT='{1}' , QUES_CODE_SYSTEM_CD='{3}' , QUES_CODE_SYSTEM_DESC_TXT='{4}', " +
+                     "QUES_DISPLAY_TXT='{5}' ,PART_TYPE_CD='{6}' ",
+                      quesIden, ansTxt, locId, quescode, quescodedesc, quesdispname, partcd);
+                }*/
                 string wherequery = string.Format(" where MSG_EVENT_ID='{0}' and question_identifier ='{1}' ", locId, quesIden);
                 StringBuilder sb = new StringBuilder(); string querystring = "";
-                if (!string.IsNullOrEmpty(clmNames))
-                {
-                    string[] columnames = clmNames.Split(',');//msgid aythid idg
-                    string[] colvalues = clmValues.Split(',');//'1' '1234' 'rtyu
-                    for (int i = 0; i < columnames.Length; i++)
-                    {
-                        sb.Append(columnames[i]);
-                        sb.Append(" =");
-                        sb.Append(colvalues[i]);
-                        sb.Append(" , ");
-                    }
-                    querystring = sb.ToString();
-                    if (!string.IsNullOrEmpty(querystring) && querystring.EndsWith(", "))
-                    {
-                        querystring = querystring.Remove(querystring.Length - 2, 2);
-                        querystring = querystring.Insert(0, ",");
-                    }
-                }
+                //if (!string.IsNullOrEmpty(clmNames))
+                //{
+                //    string[] columnames = clmNames.Split(',');//msgid aythid idg
+                //    string[] colvalues = clmValues.Split(',');//'1' '1234' 'rtyu
+                //    for (int i = 0; i < columnames.Length; i++)
+                //    {
+                //        sb.Append(columnames[i]);
+                //        sb.Append(" =");
+                //        sb.Append(colvalues[i]);
+                //        sb.Append(" , ");
+                //    }
+                //    querystring = sb.ToString();
+                //    if (!string.IsNullOrEmpty(querystring) && querystring.EndsWith(", "))
+                //    {
+                //        querystring = querystring.Remove(querystring.Length - 2, 2);
+                //        querystring = querystring.Insert(0, ",");
+                //    }
+                //}
                 qry = query + querystring + wherequery;
 
             }
             else
             {
-                string qry1 = 
-                      "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
+                if (string.IsNullOrEmpty(partcd))
+                {
+                    string qry1 =
+                      "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,"+clmNames+", QUES_CODE_SYSTEM_CD," +
                       "QUES_CODE_SYSTEM_DESC_TXT,QUES_DISPLAY_TXT";
-                if (!string.IsNullOrEmpty(clmNames))
-                {
-                    string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}',{7})",
-                         MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname,  clmValues);
-                    qry = qry1 + qry2;
+                    if (!string.IsNullOrEmpty(clmNames))
+                    {
+                        string qry2 = string.Format(" ) values({0},'{1}','Case','{2}',{3},'{4}','{5}','{6}')",
+                             MsgID, locId, quesIden, clmValues, quescode, quescodedesc, quesdispname);
+                        qry = qry1 + qry2;
+                    }
+                   /* else
+                    {
+                        string qry2 = string.Format(clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}')",
+                            MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname);
+                        qry = qry1 + qry2;
+                    }*/
                 }
-                else
-                {
-                    string qry2 = string.Format( clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{6}')",
-                        MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname);
-                    qry = qry1 + qry2;
-
-                }
+              /*  else
+                { 
+                    string qry1 =
+                      "insert into MSG_ANSWER (MSG_CONTAINER_UID,MSG_EVENT_ID,MSG_EVENT_TYPE,QUESTION_IDENTIFIER,ANSWER_TXT,QUES_CODE_SYSTEM_CD," +
+                      "QUES_CODE_SYSTEM_DESC_TXT,PART_TYPE_CD,QUES_DISPLAY_TXT";
+                    if (!string.IsNullOrEmpty(clmNames))
+                    {
+                        string qry2 = string.Format("," + clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{8}','{6}',{7})",
+                             MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, clmValues, partcd);
+                        qry = qry1 + qry2;
+                    }
+                    else
+                    {
+                        string qry2 = string.Format(clmNames + " ) values({0},'{1}','Case','{2}','{3}','{4}','{5}','{7}','{6}')",
+                            MsgID, locId, quesIden, ansTxt, quescode, quescodedesc, quesdispname, partcd);
+                        qry = qry1 + qry2;
+                    }
+                }*/
             }
             return qry;
         }

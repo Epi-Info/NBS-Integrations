@@ -103,6 +103,13 @@ namespace Default
                                             if(lastsave<= importdt)
                                             {
                                                 r.DefaultCellStyle.ForeColor = Color.Gray;
+                                                if (CommonData.Credentials.HideImported!=null && CommonData.Credentials.HideImported.ToLower() == "true")
+                                                {
+                                                    CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgvOrders.DataSource];
+                                                    currencyManager1.SuspendBinding();
+                                                    dgvOrders.CurrentCell = null;
+                                                    r.Visible = false;
+                                                }
                                             }
                                         }
                                     }
@@ -122,6 +129,13 @@ namespace Default
                                             if (lastsave <= importdt)
                                             {
                                                 r.DefaultCellStyle.ForeColor = Color.Gray;
+                                                if (CommonData.Credentials.HideImported!=null && CommonData.Credentials.HideImported.ToLower() == "true")
+                                                {
+                                                    CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgvOrders.DataSource];
+                                                    currencyManager1.SuspendBinding();
+                                                    dgvOrders.CurrentCell = null;
+                                                    r.Visible = false;
+                                                }
                                             }
                                         }
                                     }
@@ -169,8 +183,15 @@ namespace Default
                                     if (_objSql.Get_MSG_CONTAINER_Qry1(locId))
                                     {
                                         r.DefaultCellStyle.ForeColor = Color.Gray;
+                                    if (CommonData.Credentials.HideImported!=null && CommonData.Credentials.HideImported.ToLower() == "true")
+                                    {                                      
+                                        CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgvOrders.DataSource];
+                                        currencyManager1.SuspendBinding();
+                                        dgvOrders.CurrentCell = null;
+                                        r.Visible = false;
                                     }
-                                }                         
+                                }
+                            }                         
                         }
                         InsertCheckBoxColumn();
                         UpdateStatus("Completed.");
@@ -292,6 +313,7 @@ namespace Default
                                             mapping.MsgContainerStartId = CommonData.Credentials.MsgContainerStartId;
                                             mapping.PatLocalId = CommonData.Credentials.PatLocalId;
                                             mapping.InvLocalId = CommonData.Credentials.InvLocalId;
+                                            mapping.HideImported = CommonData.Credentials.HideImported;
                                             mapping.DataSource = datasource;
                                             mapping.ConfigId = configid;
                                             mapping.Ongoing_case = toStringYesNo(Convert.ToBoolean(dgrow.Cells[2].Value));
@@ -316,7 +338,14 @@ namespace Default
                                             string datasource = Convert.ToString(row["datasource"]);
                                             string id = Convert.ToString(row["Config_id"]);                                                                                  
                                                 _objSql.UpdateConfig(id);
-                                                dgrow.DefaultCellStyle.ForeColor = Color.Gray;                                                                                                                                                                                     
+                                                dgrow.DefaultCellStyle.ForeColor = Color.Gray;
+                                            if (CommonData.Credentials.HideImported!=null && CommonData.Credentials.HideImported.ToLower() == "true")
+                                            {
+                                                CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgvOrders.DataSource];
+                                                currencyManager1.SuspendBinding();
+                                                dgvOrders.CurrentCell = null;
+                                                dgrow.Visible = false;
+                                            }
                                         }
                                     }
                                 }
@@ -324,6 +353,8 @@ namespace Default
                                 {
                                     anyerrors = true;
                                 }
+
+                                dgrow.Cells[0].Value = false;
                             }
                         }
                     }
@@ -357,6 +388,39 @@ namespace Default
         private void cmbConfigList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void dgvOrders_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            //  lblStatus.Text =
+            UpdateStatus("Please wait.. it is loading....");
+            string formName = Convert.ToString(cmbConfigList.SelectedItem);
+            DataTable dt = _objSql.ReadSettings(formName);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow drow in dt.Rows)
+                { 
+                    string locId = "";
+                string configid = Convert.ToString(drow["Config_id"]);
+                    foreach (DataGridViewRow r in dgvOrders.Rows)
+                    {
+                        string recId = Convert.ToString(r.Cells["record_id"].Value);
+                        locId = "REDCap_" + configid + "_" + recId;
+                        if (_objSql.Get_MSG_CONTAINER_Qry1(locId))
+                        {
+                            r.DefaultCellStyle.ForeColor = Color.Gray;   
+                            if (CommonData.Credentials.HideImported!=null && CommonData.Credentials.HideImported.ToLower() == "true")
+                            {
+                                CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dgvOrders.DataSource];
+                                currencyManager1.SuspendBinding();
+                                dgvOrders.CurrentCell = null;
+                                r.Visible = false;
+                            }
+                        }
+                    }
+                }
+            }
+            UpdateStatus("Completed.");
         }
     }
 }

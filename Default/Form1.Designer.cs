@@ -59,6 +59,7 @@
             this.dgvOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvOrders.Size = new System.Drawing.Size(788, 311);
             this.dgvOrders.TabIndex = 1;
+            this.dgvOrders.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvOrders_ColumnHeaderMouseClick);
             // 
             // statusStrip1
             // 

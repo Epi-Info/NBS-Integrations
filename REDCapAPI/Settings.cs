@@ -40,6 +40,9 @@ namespace REDCapAPI
             public string MsgContainerStartId { get; set; }
             public string PatLocalId { get; set; }
             public string InvLocalId { get; set; }
+            public string HideImported { get; set; }
+
+            public string HideNBSConnection { get; set; }
         }
 
         public struct Mappings
@@ -63,6 +66,9 @@ namespace REDCapAPI
             public string PatLocalId { get; set; }
             public string InvLocalId { get; set; }
             public List<Mappings> LineItems  { get; set; }
+            public string HideImported { get; set; }
+
+            public string HideNBSConnection { get; set; }
         }
 
         public struct QuestioLookup
@@ -121,6 +127,14 @@ namespace REDCapAPI
                 selectedNode = xmlDoc.SelectSingleNode("/Settings/INV_LOCAL_ID");
                 if (selectedNode != null)
                     credentials.InvLocalId = selectedNode.InnerText;
+
+                selectedNode = xmlDoc.SelectSingleNode("/Settings/HideImported");
+                if (selectedNode != null)
+                    credentials.HideImported = selectedNode.InnerText;
+
+                selectedNode = xmlDoc.SelectSingleNode("/Settings/HideNBSConnection");
+                if (selectedNode != null)
+                    credentials.HideNBSConnection = selectedNode.InnerText;
             }
             catch (Exception exception)
             {
